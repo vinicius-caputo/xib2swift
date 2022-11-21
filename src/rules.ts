@@ -1,6 +1,6 @@
 export const rules: any = {
     label: {
-        opaque: 'opaque',
+        opaque: 'isOpaque',
         userInteractionEnabled: 'userInteractionEnabled',
         contentMode: 'contentMode',
         horizontalHuggingPriority: 'horizontalHuggingPriority',
@@ -13,7 +13,15 @@ export const rules: any = {
         adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
         adjustsFontSizeToFit: 'adjustsFontSizeToFit',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
-       
+    },
+    button: {
+        opaque: 'isOpaque',
+        contentMode: 'contentMode',
+        contentHorizontalAlignment: 'contentHorizontalAlignment',
+        contentVerticalAlignment: 'contentVerticalAlignment',
+        buttonType: 'buttonType',
+        lineBreakMode: 'lineBreakMode',
+        translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     }
 }
 

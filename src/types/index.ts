@@ -13,3 +13,12 @@ export interface Outlet {
     property: string,
     id: string
 }
+
+export interface UIitem {
+    tag: string,
+    id: string
+}
+
+export interface uiItems{
+    [key: string]: UIitem
+}
