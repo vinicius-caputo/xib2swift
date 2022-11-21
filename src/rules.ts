@@ -1,17 +1,14 @@
 export const rules: any = {
     label: {
         opaque: 'isOpaque',
-        userInteractionEnabled: 'userInteractionEnabled',
+        userInteractionEnabled: 'isUserInteractionEnabled',
         contentMode: 'contentMode',
-        horizontalHuggingPriority: 'horizontalHuggingPriority',
-        verticalHuggingPriority: 'verticalHuggingPriority',
         text: 'text',
         textAlignment: 'textAlignment',
-        lineBreakMode: 'lineBreakMode',
         numberOfLines: 'numberOfLines',
         baselineAdjustment: 'baselineAdjustment',
         adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
-        adjustsFontSizeToFit: 'adjustsFontSizeToFit',
+        adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     },
     button: {
@@ -19,8 +16,6 @@ export const rules: any = {
         contentMode: 'contentMode',
         contentHorizontalAlignment: 'contentHorizontalAlignment',
         contentVerticalAlignment: 'contentVerticalAlignment',
-        buttonType: 'buttonType',
-        lineBreakMode: 'lineBreakMode',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     }
 }

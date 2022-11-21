@@ -10,8 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TesteViewController" customModule="testeXib2ViewCode" customModuleProvider="target">
             <connections>
-                <outlet property="button" destination="31N-5Y-qIV" id="J4h-j2-Zbj"/>
-                <outlet property="label" destination="Pdj-mh-8Uv" id="dxY-bX-q2b"/>
+                <outlet property="countLabel" destination="Pdj-mh-8Uv" id="iSJ-ya-8nn"/>
+                <outlet property="incremnetButton" destination="31N-5Y-qIV" id="4B0-c7-XhQ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -21,17 +21,17 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pdj-mh-8Uv">
-                    <rect key="frame" x="10" y="389.66666666666669" width="394" height="21"/>
+                    <rect key="frame" x="10" y="389.5" width="394" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31N-5Y-qIV">
-                    <rect key="frame" x="10" y="430.66666666666669" width="394" height="35"/>
+                    <rect key="frame" x="10" y="430.5" width="394" height="35"/>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Button"/>
                     <connections>
-                        <action selector="updateLabel:" destination="-1" eventType="touchUpInside" id="DOy-Ej-Qe4"/>
+                        <action selector="incremnetcount:" destination="-1" eventType="touchUpInside" id="fGy-vX-zUl"/>
                     </connections>
                 </button>
             </subviews>

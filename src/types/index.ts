@@ -14,11 +14,11 @@ export interface Outlet {
     id: string
 }
 
-export interface UIitem {
+interface UIitem {
     tag: string,
-    id: string
+    name?: string,
 }
 
-export interface uiItems{
+export interface UIItems{
     [key: string]: UIitem
 }
