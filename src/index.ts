@@ -1,10 +1,10 @@
 /*
 TODO:
-- Work with subviews inside views
-- Work with non viewController components, like tableViewcell (base View)
-- need to make the diference beteween the conjuction of default rules e rules
-- need to make constraints more modular because theathes it one pair of constraints 
-- fix constraints variations like multiplier enqualToConstant
+[] Work with subviews inside views
+[] Work with non viewController components, like tableViewcell (base View)
+[] need to make the diference beteween the conjuction of default rules e rules
+[x] need to make constraints more modular because theathes it one pair of constraints 
+[] fix constraints variations like multiplier enqualToConstant
 */
 
 import { parser } from 'posthtml-parser'
@@ -21,19 +21,19 @@ import { capitalizeFirstLetter } from './Utils';
  * @param nodes Array of XibNodes
  * @returns Array of XibNodes
  */
-function clearEmptyNodes(nodes: XibNode[]): XibNode[] {
+function clearEmptyNodes(nodes: XibNode[],  father?: XibNode ): XibNode[] {
     let result: XibNode[] = [];
     if (Array.isArray(nodes)) {
         for (const node of nodes) {
             if ('object' == typeof node) {
-                node.content = clearEmptyNodes(node.content);
+                node.father = father;
+                node.content = clearEmptyNodes(node.content, node);
                 result.push(node);
             }
         }
     }
     return result;
 }
-
 
 /**
  * Navigate to xib AST and get all points of interest, like outlets, subvies and constraints
@@ -58,12 +58,6 @@ function navigate(nodes: XibNode[]): void {
                 uiItems[node.attrs.id] = {
                     tag: node.tag,
                     name: "view.safeAreaLayoutGuide"
-                };
-                break;
-            case 'view':
-                uiItems[node.attrs.id] = {
-                    tag: node.tag,
-                    name: 'view'
                 };
                 break;
             default:
@@ -124,7 +118,7 @@ function generateUIDeclarations(nodes: XibNode[]): string[] {
 }
 
 /**
- *  Try to associate a id with a property name of UI element.
+ * Try to associate a id with a property name of UI element.
  * @param id 
  * @returns name of the property or tag name if not found
  */
@@ -133,52 +127,79 @@ function resolveIdToPropetyName(id: string): string {
 }
 
 
-function genertaeConstraintsDeclarations(nodes: XibNode[]): string[] {
+function genertaeConstraintsDeclarations(nodes: XibNode[]): string {
     // console.log(nodes);
     let propertys: string = '\n';
-    let constraintsDeclarations: string[] = [];
+
     for (const node of nodes) {
+       
+        if (node.attrs.firstItem == undefined) {
+            let grandFather = node.father?.father;
+            if (grandFather == undefined) {
+                continue;
+            }
+            propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
+            continue;
+        }
+
         let constant = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
+        if (node.attrs.multiplier != undefined) {
+            constant += `, multiplier: ${node.attrs.multiplier}`;
+        }
         propertys += `\t${resolveIdToPropetyName(node.attrs.firstItem)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor${constant}),\n`;
     }
-    let declaration = `NSLayoutConstraint.activate([${propertys}])`;
-    console.log(declaration);
-    
-    constraintsDeclarations.push(declaration);
-    return constraintsDeclarations;
+    return `NSLayoutConstraint.activate([${propertys}])\n`;
 }
 
-function generateViewHierachy(){
+function generateViewHierachy(subview: XibNode){
     const aceptedTags = Object.keys(rules);
-    for (const key in uiItems) {
-        if (aceptedTags.includes(uiItems[key].tag)) {
-            console.log(`view.addSubview(${resolveIdToPropetyName(key)})`);
+    let fatherId = subview.father?.attrs.id;
+    if (fatherId == undefined) {
+       return;
+    }
+    for (const node of subview.content) {
+        if (aceptedTags.includes(node.tag)) {
+            console.log(`${resolveIdToPropetyName(fatherId)}.addSubview(${resolveIdToPropetyName(node.attrs.id)})`);
         }
     }
+    
 }
 
 let outlets: Outlet[] = [];
 let constraints: XibNode[] = [];
 let subviews: XibNode[] = [];
 let uiItems: UIItems = {};
-let baseView: XibNode[] = [];
 
 function main() {
+
     const fs = require('fs')
-    let xib = fs.readFileSync('samples/TesteViewController.xib', 'utf-8')
+    let xib = fs.readFileSync('samples/GameViewController.xib', 'utf-8')
 
     xib = parser(xib, { xmlMode: true });
     xib = clearEmptyNodes(xib);
-
     navigate(xib);
-    let baseSubView = subviews[0];
 
-    generateUIDeclarations(baseSubView.content);
+    let baseView: XibNode | undefined = subviews[0].father
+    console.log(`Base view: ${baseView?.attrs.id ?? ''} - ${baseView?.tag ?? ''}`);
+    addToUIItems(baseView?.attrs.id ?? '', baseView?.tag ?? '');
+
+    for (const subview of subviews) {
+        generateUIDeclarations(subview.content);
+    }
+
+    console.log('----------------------------');
+
+    let constraintsDeclarations = '';
+    for (const constraint of constraints) {
+        constraintsDeclarations += genertaeConstraintsDeclarations(constraint.content);
+    }
+    console.log(constraintsDeclarations);
+    
     console.log('----------------------------');
     
-    genertaeConstraintsDeclarations(constraints[0].content);
-    console.log('----------------------------');
-    generateViewHierachy();
+    for (const subview of subviews.reverse()) {
+        generateViewHierachy(subview);
+    }
 }
 
 main()

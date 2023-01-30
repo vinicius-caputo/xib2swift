@@ -6,7 +6,8 @@ export interface XibNode {
     attrs: {
         [key: string]: string
     }
-    content: XibNode[]
+    content: XibNode[],
+    father?: XibNode
 }
 
 export interface Outlet {
@@ -17,6 +18,7 @@ export interface Outlet {
 interface UIitem {
     tag: string,
     name?: string,
+    children?: UIitem[],
 }
 
 export interface UIItems{

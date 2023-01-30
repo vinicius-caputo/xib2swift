@@ -17,7 +17,13 @@ export const rules: any = {
         contentHorizontalAlignment: 'contentHorizontalAlignment',
         contentVerticalAlignment: 'contentVerticalAlignment',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
-    }
+    },
+    view: {
+        opaque: 'isOpaque',
+        userInteractionEnabled: 'isUserInteractionEnabled',
+        contentMode: 'contentMode',
+        translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
+    },
 }
 
 export function resolveResultRule(result: string): string {
