@@ -1,6 +1,6 @@
 /*
 TODO:
-[] Work with subviews inside views
+[x] Work with subviews inside views
 [] Work with non viewController components, like tableViewcell (base View)
 [] need to make the diference beteween the conjuction of default rules e rules
 [x] need to make constraints more modular because theathes it one pair of constraints 
@@ -91,6 +91,18 @@ function addToUIItems(id: string, tag: string) {
     };
 }
 
+function doAditionalConfiguration(tag: string,nodes: XibNode[]): string {
+    let property: string = '';
+    for (const node of nodes) {
+        if (node.tag == 'color') {
+            property += `\t${tag}.backgroundColor = .${node.attrs.systemColor.replace('Color','')}\n`
+        }
+    }
+    return property;
+}
+
+
+
 /**
  * Generete UI declarations like buttons and labels with lazy var anottation.
  * @param nodes xib node wich contains the UI elements
@@ -107,8 +119,10 @@ function generateUIDeclarations(nodes: XibNode[]): string[] {
             for (const key in attributes) {
                 if (rules[node.tag][key] != undefined) {
                     property += `\t${node.tag}.${rules[node.tag][key]} = ${resolveResultRule(attributes[key])}\n`;
+                   
                 }
             }
+            property += `${doAditionalConfiguration(node.tag, node.content)}`;
             let declaration = `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}() `;
             uiDeclarations.push(declaration);
             console.log(declaration);
@@ -132,17 +146,27 @@ function genertaeConstraintsDeclarations(nodes: XibNode[]): string {
     let propertys: string = '\n';
 
     for (const node of nodes) {
-       
-        if (node.attrs.firstItem == undefined) {
+        
+        if ((node.attrs.secondAttribute == 'width' || node.attrs.secondAttribute == 'height') && node.attrs.multiplier != undefined) {
             let grandFather = node.father?.father;
-            if (grandFather == undefined) {
+            
+            if (grandFather == undefined ) {
                 continue;
             }
-            propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
+            propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor, multiplier: ${node.attrs.multiplier.replace(':','/')}),\n`;
+            continue
+        }
+        let constant = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
+        if (node.attrs.firstItem == undefined ) {
+            let grandFather = node.father?.father;
+            if (grandFather == undefined ) {
+                continue;
+            }
+            propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor${constant}),\n`;
             continue;
         }
 
-        let constant = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
+       
         if (node.attrs.multiplier != undefined) {
             constant += `, multiplier: ${node.attrs.multiplier}`;
         }

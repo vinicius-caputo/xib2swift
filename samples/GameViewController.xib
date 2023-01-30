@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,7 +19,9 @@
                 <outlet property="b6" destination="SPF-cv-b30" id="VBm-un-qr8"/>
                 <outlet property="b7" destination="1XL-5y-Vrs" id="plr-ak-rRX"/>
                 <outlet property="b8" destination="Dmb-uF-aP2" id="NCh-C8-Q7G"/>
+                <outlet property="resetButton" destination="6Gg-z0-Qg4" id="5gA-1b-7sK"/>
                 <outlet property="statusLabel" destination="JvG-QW-cxv" id="ZVM-bV-pBK"/>
+                <outlet property="supportView" destination="F80-1v-rM9" id="rfI-8g-bSw"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -81,7 +83,7 @@
                             <color key="backgroundColor" systemColor="systemPinkColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="40"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" title=" ">
+                            <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                         </button>
@@ -171,14 +173,9 @@
                     <constraints>
                         <constraint firstAttribute="width" secondItem="6Gg-z0-Qg4" secondAttribute="height" multiplier="100:20" id="ola-Ra-R50"/>
                     </constraints>
-                    <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Resetar jogo">
-                        <fontDescription key="titleFontDescription" type="system" pointSize="23"/>
-                        <color key="baseBackgroundColor" systemColor="systemPurpleColor"/>
-                    </buttonConfiguration>
-                    <connections>
-                        <action selector="resetGame:" destination="-1" eventType="touchUpInside" id="Id2-x3-WY5"/>
-                    </connections>
+                    <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Resetar jogo"/>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
@@ -206,9 +203,6 @@
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

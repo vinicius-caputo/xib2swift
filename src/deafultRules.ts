@@ -1,4 +1,4 @@
-export const rules: any = {
+export const defaultRules: any = {
     label: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
@@ -8,6 +8,7 @@ export const rules: any = {
         numberOfLines: 'numberOfLines',
         baselineAdjustment: 'baselineAdjustment',
         adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
+        adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     },
     button: {
@@ -23,15 +24,4 @@ export const rules: any = {
         contentMode: 'contentMode',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     },
-}
-
-export function resolveResultRule(result: string): string {
-    switch (result) {
-        case "NO":
-            return "false";
-        case "YES":
-            return "true";
-        default:
-            return /\d/.test(result) ? result : `.${result}`;
-    }
 }
