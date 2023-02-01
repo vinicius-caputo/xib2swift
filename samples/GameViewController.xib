@@ -21,7 +21,6 @@
                 <outlet property="b8" destination="Dmb-uF-aP2" id="NCh-C8-Q7G"/>
                 <outlet property="resetButton" destination="6Gg-z0-Qg4" id="5gA-1b-7sK"/>
                 <outlet property="statusLabel" destination="JvG-QW-cxv" id="ZVM-bV-pBK"/>
-                <outlet property="supportView" destination="F80-1v-rM9" id="rfI-8g-bSw"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -170,12 +169,15 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Gg-z0-Qg4">
                     <rect key="frame" x="50" y="474" width="220" height="44"/>
+                    <color key="backgroundColor" systemColor="systemPurpleColor"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="6Gg-z0-Qg4" secondAttribute="height" multiplier="100:20" id="ola-Ra-R50"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="23"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <state key="normal" title="Resetar jogo"/>
+                    <state key="normal" title="Resetar jogo">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
@@ -203,6 +205,9 @@
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

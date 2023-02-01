@@ -4,11 +4,11 @@ TODO:
 [] Work with non viewController components, like tableViewcell (base View)
 [] need to make the diference beteween the conjuction of default rules e rules
 [x] need to make constraints more modular because theathes it one pair of constraints 
-[] fix constraints variations like multiplier enqualToConstant
+[x] fix constraints variations like multiplier enqualToConstant
 */
 
 import { parser } from 'posthtml-parser'
-import { XibNode, Outlet,  UIItems } from './types';
+import { XibNode, Outlet,  IDtoName } from './types';
 import { rules, resolveResultRule } from './rules';
 import { capitalizeFirstLetter } from './Utils';
 
@@ -41,6 +41,7 @@ function clearEmptyNodes(nodes: XibNode[],  father?: XibNode ): XibNode[] {
  */
 function navigate(nodes: XibNode[]): void {
     for (const node of nodes) {
+        tableIDtoName[node.attrs?.id] = node.tag + '__' + node?.attrs?.id?.replaceAll('-','_');
         switch (node.tag) {
             case 'outlet':
                 outlets.push({
@@ -55,41 +56,20 @@ function navigate(nodes: XibNode[]): void {
                 subviews.push(node);
                 break;
             case 'viewLayoutGuide':
-                uiItems[node.attrs.id] = {
-                    tag: node.tag,
-                    name: "view.safeAreaLayoutGuide"
-                };
+                tableIDtoName[node.attrs.id] = "view.safeAreaLayoutGuide"
                 break;
             default:
                 break;
+        }
+        for (const outlet of outlets) {
+            if (outlet.id == node?.attrs?.id) {
+               tableIDtoName[node.attrs.id] = outlet.property;
+            }
         }
         navigate(node.content);
     }
 }
 
-/**
- * Try to associate a outlet id with a UI element.
- * 
- * It are used to declare UI elements and constraints with the name of the propety in the original
- * swift file
- * @param id The id of the UI element
- * @returns Name of the UI element with associated outlet id or undefined if not found
- */
-function resolveOutletIdToUI(id: string): string|undefined {
-    for (const outlet of outlets) {
-        if (outlet.id == id) {
-            return outlet.property;
-        }
-    }
-    return undefined;
-}
-
-function addToUIItems(id: string, tag: string) {
-    uiItems[id] = {
-        tag: tag,
-        name: resolveOutletIdToUI(id) 
-    };
-}
 
 function doAditionalConfiguration(tag: string,nodes: XibNode[]): string {
     let property: string = '';
@@ -113,7 +93,6 @@ function generateUIDeclarations(nodes: XibNode[]): string[] {
     let uiDeclarations: string[] = [];
     for (const node of nodes) {
         if (aceptedTags.includes(node.tag)) {
-            addToUIItems(node.attrs.id, node.tag);
             let attributes = node.attrs;
             let property: string = '\n';
             for (const key in attributes) {
@@ -137,14 +116,12 @@ function generateUIDeclarations(nodes: XibNode[]): string[] {
  * @returns name of the property or tag name if not found
  */
 function resolveIdToPropetyName(id: string): string {
-    return uiItems[id]?.name ?? uiItems[id].tag;
+    return tableIDtoName[id] != undefined ? tableIDtoName[id] : "error";
 }
 
 
 function genertaeConstraintsDeclarations(nodes: XibNode[]): string {
-    // console.log(nodes);
     let propertys: string = '\n';
-
     for (const node of nodes) {
         
         if ((node.attrs.secondAttribute == 'width' || node.attrs.secondAttribute == 'height') && node.attrs.multiplier != undefined) {
@@ -178,9 +155,7 @@ function genertaeConstraintsDeclarations(nodes: XibNode[]): string {
 function generateViewHierachy(subview: XibNode){
     const aceptedTags = Object.keys(rules);
     let fatherId = subview.father?.attrs.id;
-    if (fatherId == undefined) {
-       return;
-    }
+    if (!fatherId) { return; }
     for (const node of subview.content) {
         if (aceptedTags.includes(node.tag)) {
             console.log(`${resolveIdToPropetyName(fatherId)}.addSubview(${resolveIdToPropetyName(node.attrs.id)})`);
@@ -192,7 +167,8 @@ function generateViewHierachy(subview: XibNode){
 let outlets: Outlet[] = [];
 let constraints: XibNode[] = [];
 let subviews: XibNode[] = [];
-let uiItems: UIItems = {};
+let tableIDtoName: IDtoName = {};
+
 
 function main() {
 
@@ -205,7 +181,7 @@ function main() {
 
     let baseView: XibNode | undefined = subviews[0].father
     console.log(`Base view: ${baseView?.attrs.id ?? ''} - ${baseView?.tag ?? ''}`);
-    addToUIItems(baseView?.attrs.id ?? '', baseView?.tag ?? '');
+
 
     for (const subview of subviews) {
         generateUIDeclarations(subview.content);
@@ -214,6 +190,7 @@ function main() {
     console.log('----------------------------');
 
     let constraintsDeclarations = '';
+    
     for (const constraint of constraints) {
         constraintsDeclarations += genertaeConstraintsDeclarations(constraint.content);
     }

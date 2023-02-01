@@ -15,12 +15,6 @@ export interface Outlet {
     id: string
 }
 
-interface UIitem {
-    tag: string,
-    name?: string,
-    children?: UIitem[],
-}
-
-export interface UIItems{
-    [key: string]: UIitem
+export interface IDtoName {
+    [id: string]: string
 }
