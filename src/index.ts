@@ -2,7 +2,7 @@
 TODO:
 [x] Work with subviews inside views
 [] Work with non viewController components, like tableViewcell (base View)
-[] need to make the diference beteween the conjuction of default rules e rules
+[x] need to make the diference beteween the conjuction of default rules e rules
 [x] need to make constraints more modular because theathes it one pair of constraints 
 [x] fix constraints variations like multiplier enqualToConstant
 */
@@ -36,18 +36,12 @@ export function xib2viewcode(xibFile: string): string {
     for (const subview of xib.subviews.reverse()) {
         viewHierachy += viewHierchyGen.generateViewHierachy(subview);
     }
-
-    /*console.log(uiDeclarations);
-    console.log('----------------------------');
-    console.log(constraintsDeclarations);
-    console.log('----------------------------');
-    console.log(viewHierachy);*/
     
     return uiDeclarations + '\n----------------------------\n' + viewHierachy + '\n----------------------------\n' + constraintsDeclarations;
 }
 
 
 //const fs = require('fs');
-//let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
+//let xibFile = fs.readFileSync('./samples/ViewControllerSample.xib', 'utf8');
 //console.log(xib2viewcode(xibFile));
 
