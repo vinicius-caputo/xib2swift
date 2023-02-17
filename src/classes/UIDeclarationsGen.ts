@@ -32,6 +32,13 @@ export class UIDeclarationsGen {
     private doAditionalConfiguration(tag: string, nodes: XibNode[]): string {
         let property: string = '';
 
+        /*const addAditionalConfiguration = {
+            'button': {
+                'color': () => { return `\t${tag}.setTitleColor(.${nodes[0].attrs.systemColor.replace('Color','')}, for: .normal)\n`},
+                'fontDescription': () => { return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${nodes[0].attrs.pointSize})\n`},
+                'state': () => { return `\t${tag}.setTitle("${nodes[0].attrs.title}", for: .${nodes[0].attrs.key})\n`},
+            }
+        }*/
 
         for (const node of nodes) {
             if (node.tag == 'color') {
