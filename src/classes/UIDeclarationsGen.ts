@@ -43,6 +43,9 @@ export class UIDeclarationsGen {
             else if (node.tag == 'state') {
                 property += `\t${tag}.setTitle("${node.attrs.title}", for: .${node.attrs.key})\n`
             } 
+            else if (node.tag == 'rect') {
+                property += `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n`
+            }
         }
         return property;
     }
