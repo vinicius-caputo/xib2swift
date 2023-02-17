@@ -1,0 +1,51 @@
+body {
+    background-color: whitesmoke;
+    width: 100vw;
+    height: 100vh;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    background-color: #d5cfe2;
+    color: white;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+#box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    resize: none;
+}
+
+#firstbox {
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+    padding: 20px;
+
+}
+#secondbox {
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+}

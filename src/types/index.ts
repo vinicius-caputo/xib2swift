@@ -18,3 +18,9 @@ export interface Outlet {
 export interface IDtoName {
     [id: string]: string
 }
+
+export interface Rules {
+    [tag: string]: {
+        [key: string]: string
+    }
+}

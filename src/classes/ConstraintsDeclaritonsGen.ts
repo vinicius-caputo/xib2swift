@@ -4,6 +4,7 @@ import { resolveIdToPropetyName } from "../Utils";
 export class ConstraintsDeclaritonsGen {
     public genertaeConstraintsDeclarations(nodes: XibNode[]): string {
         let propertys: string = '\n';
+        
         for (const node of nodes) {
             
             if ((node.attrs.secondAttribute == 'width' || node.attrs.secondAttribute == 'height') && node.attrs.multiplier != undefined) {

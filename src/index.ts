@@ -13,10 +13,7 @@ import { ConstraintsDeclaritonsGen } from './classes/ConstraintsDeclaritonsGen';
 import { Xib } from './classes/XibManipulator';
 
 
-function main() {
-
-    const fs = require('fs')
-    let xibFile = fs.readFileSync('samples/GameViewController.xib', 'utf-8')
+export function xib2viewcode(xibFile: string): string {
 
     const xib = Xib.getInstance();
     xib.create(xibFile);
@@ -25,27 +22,33 @@ function main() {
     const viewHierchyGen = new ViewHierachyGen();
     const constraintsDeclarationsGen = new ConstraintsDeclaritonsGen();
     
+    let uiDeclarations = '';
     for (const subview of xib.subviews) {
-        uiDeclarationsGen.generateUIDeclarations(subview.content);
+        uiDeclarations+= uiDeclarationsGen.generateUIDeclarations(subview.content);
     }
 
-    console.log('----------------------------');
-
     let constraintsDeclarations = '';
-    
     for (const constraint of xib.constraints) {
         constraintsDeclarations += constraintsDeclarationsGen.genertaeConstraintsDeclarations(constraint.content);
     }
-    console.log(constraintsDeclarations);
     
-    console.log('----------------------------');
-    
+    let viewHierachy = '';
     for (const subview of xib.subviews.reverse()) {
-        viewHierchyGen.generateViewHierachy(subview);
+        viewHierachy += viewHierchyGen.generateViewHierachy(subview);
     }
+
+    /*console.log(uiDeclarations);
+    console.log('----------------------------');
+    console.log(constraintsDeclarations);
+    console.log('----------------------------');
+    console.log(viewHierachy);*/
+    
+    return uiDeclarations + '\n----------------------------\n' + viewHierachy + '\n----------------------------\n' + constraintsDeclarations;
 }
 
-main()
+
+ 
+
 
 
 

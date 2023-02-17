@@ -1,37 +1,77 @@
-export const rules: any = {
+import { Rules } from "./types";
+
+const rules: Rules = {
     label: {
-        opaque: 'isOpaque',
-        userInteractionEnabled: 'isUserInteractionEnabled',
-        contentMode: 'contentMode',
         text: 'text',
         textAlignment: 'textAlignment',
         numberOfLines: 'numberOfLines',
         baselineAdjustment: 'baselineAdjustment',
         adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
-        translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
+        adjustsFontSizeToFitWidth: 'adjustsFontSizeToFitWidth',
     },
-    button: {
-        opaque: 'isOpaque',
-        contentMode: 'contentMode',
-        contentHorizontalAlignment: 'contentHorizontalAlignment',
-        contentVerticalAlignment: 'contentVerticalAlignment',
-        translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
+    button: {},
+    view: {},
+    stackView: {
+        axis: 'axis',
     },
-    view: {
+    default: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
         contentMode: 'contentMode',
         translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
-    },
+    }
 }
 
-export function resolveResultRule(result: string): string {
-    switch (result) {
-        case "NO":
-            return "false";
-        case "YES":
-            return "true";
-        default:
-            return /\d/.test(result) ? result : `.${result}`;
+export const aceptedTags: string[] = Object.keys(rules);
+
+export function resolveRule(tag: string, key: string): string {
+    return rules[tag][key] != undefined ? rules[tag][key] : rules['default'][key] ?? undefined;
+}
+
+export const defaultRules: any = {
+    opaque: 'isOpaque = false',
+    userInteractionEnabled: 'isUserInteractionEnabled = false',
+}
+
+export const ignoredRules: string[] = [
+    "horizontalHuggingPriority",
+    "verticalHuggingPriority",
+    "fixedFrame",
+    "id",
+    "buttonType"]
+
+export function resolveResultRule(result: string, property: string): string {
+    
+    const propertyToResolve: any = {
+        'text': () => { return `"${result}"`; },
+        'lineBreakMode': () => {
+            switch (result) {
+                case 'wordWrap':
+                    return '.byWordWrapping';
+                case 'tailTruncation':
+                    return '.byTruncatingTail';
+                case 'headTruncation':
+                    return '.byTruncatingHead';
+                case 'middleTruncation':
+                    return '.byTruncatingMiddle';
+                case 'charWrap':
+                    return '.byCharWrapping';
+                case 'clip':
+                    return '.byClipping';
+                default:
+                    return '.byWordWrapping'
+            };
+        },
+        'default': () => {
+            switch (result) {
+                case "NO":
+                    return "false";
+                case "YES":
+                    return "true";
+                default:
+                    return /\d/.test(result) ? result : `.${result}`;
+            }
+        },
     }
+    return propertyToResolve[property] != undefined ? propertyToResolve[property]() : propertyToResolve['default']();
 }

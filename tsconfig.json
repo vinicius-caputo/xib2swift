@@ -5,5 +5,7 @@
         "preserveConstEnums": true,
         "strict": true,
         "target": "ESNext",
+        "sourceMap": true,
+        "outDir": "./website/xib2viewcode",
     }
 }
