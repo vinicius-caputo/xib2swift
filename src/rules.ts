@@ -1,4 +1,5 @@
 import { Rules } from "./types";
+import { lowerFirstletter } from "./Utils";
 
 const rules: Rules = {
     label: {
@@ -7,7 +8,7 @@ const rules: Rules = {
         numberOfLines: 'numberOfLines',
         baselineAdjustment: 'baselineAdjustment',
         adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
-        adjustsFontSizeToFitWidth: 'adjustsFontSizeToFitWidth',
+        adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
     },
     button: {},
     view: {},
@@ -33,12 +34,15 @@ export const defaultRules: any = {
     userInteractionEnabled: 'isUserInteractionEnabled = false',
 }
 
-export const ignoredRules: string[] = [
-    "horizontalHuggingPriority",
-    "verticalHuggingPriority",
-    "fixedFrame",
-    "id",
-    "buttonType"]
+export function shouldIgnoreRule(tag: string, key: string): boolean {
+    const propertyToIgnore: any = {
+        button: ['buttonType', 'lineBreakMode'],
+        default: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
+    }
+    let ignoredRules =  propertyToIgnore['default']  + propertyToIgnore[tag];
+    return ignoredRules.includes(key);
+}
+    
 
 export function resolveResultRule(result: string, property: string): string {
     
@@ -69,7 +73,7 @@ export function resolveResultRule(result: string, property: string): string {
                 case "YES":
                     return "true";
                 default:
-                    return /\d/.test(result) ? result : `.${result}`;
+                    return /\d/.test(result) ? result : `.${lowerFirstletter(result)}`;
             }
         },
     }

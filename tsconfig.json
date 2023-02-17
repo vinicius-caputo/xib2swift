@@ -6,6 +6,6 @@
         "strict": true,
         "target": "ESNext",
         "sourceMap": true,
-        "outDir": "./website/xib2viewcode",
+        "outDir": "docs/xib2viewcode",
     }
 }

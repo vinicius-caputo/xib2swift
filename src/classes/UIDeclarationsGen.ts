@@ -1,5 +1,5 @@
 import { XibNode } from "../types";
-import { resolveRule, resolveResultRule, ignoredRules, aceptedTags, defaultRules } from "../rules";
+import { resolveRule, resolveResultRule, shouldIgnoreRule, aceptedTags, defaultRules } from "../rules";
 import { capitalizeFirstLetter, resolveIdToPropetyName } from "../Utils";
 
 export class UIDeclarationsGen {
@@ -11,7 +11,7 @@ export class UIDeclarationsGen {
                 let attributes = node.attrs;
                 let property: string = '\n';
                 for (const key in attributes) {
-                    if (ignoredRules.includes(key)) continue;
+                    if (shouldIgnoreRule(node.tag, key)) continue;
 
                     if (resolveRule(node.tag, key) != undefined) {
                         let attributeDeclarion = `\t${node.tag}.${resolveRule(node.tag, key)} = ${resolveResultRule(attributes[key], key)}\n`;
@@ -32,8 +32,6 @@ export class UIDeclarationsGen {
     private doAditionalConfiguration(tag: string, nodes: XibNode[]): string {
         let property: string = '';
 
-        
-    
 
         for (const node of nodes) {
             if (node.tag == 'color') {

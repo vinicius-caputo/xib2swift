@@ -8,3 +8,7 @@ export function resolveIdToPropetyName(id: string): string {
     let xib = Xib.getInstance();
     return xib.tableIDtoName[id] != undefined ? xib.tableIDtoName[id] : "error";
 }
+
+export function lowerFirstletter (string: string): string {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+}
