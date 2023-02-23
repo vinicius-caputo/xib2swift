@@ -15,7 +15,7 @@ const rules: Rules = {
     stackView: {
         axis: 'axis',
     },
-    default: {
+    common: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
         contentMode: 'contentMode',
@@ -26,7 +26,7 @@ const rules: Rules = {
 export const aceptedTags: string[] = Object.keys(rules);
 
 export function resolveRule(tag: string, key: string): string {
-    return rules[tag][key] != undefined ? rules[tag][key] : rules['default'][key] ?? undefined;
+    return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? undefined;
 }
 
 export const defaultRules: any = {
@@ -37,9 +37,9 @@ export const defaultRules: any = {
 export function shouldIgnoreRule(tag: string, key: string): boolean {
     const propertyToIgnore: any = {
         button: ['buttonType', 'lineBreakMode'],
-        default: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
+        common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
     }
-    let ignoredRules =  propertyToIgnore['default']  + propertyToIgnore[tag];
+    let ignoredRules =  propertyToIgnore['common'] + propertyToIgnore[tag];
     return ignoredRules.includes(key);
 }
     

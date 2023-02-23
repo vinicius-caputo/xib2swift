@@ -24,3 +24,8 @@ export interface Rules {
         [key: string]: string
     }
 }
+export interface aditionalConfiguration {
+    [tag: string]: {
+        [key: string]: () => string
+    }
+}
