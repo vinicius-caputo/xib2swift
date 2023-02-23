@@ -51,12 +51,29 @@ export class UIDeclarationsGen {
                     }
                     return property;
                 },
-                'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n` },
-            },
-            'label': {
-                'color': () => { return `\t${tag}.textColor = ${this.resolveColor(node)}\n` },
+                'buttonConfiguration': () => { 
+                    let property = `\t${tag}.configuration = .${node.attrs.style}\n`;
+                    let children = node.content;
+                    for (const child of children) {
+                        if (child.tag == 'color') {
+                            property += `\t${tag}.configuration?.${child.attrs.key} = ${this.resolveColor(child)}\n`;
+                        }
+                    }
+                    return property;
+                },
+                'connections': () => {    
+                    let property = '';
+                    let children = node.content;
+                    for (const child of children) {
+                        if (child.tag == 'action') {
+                            property += `\t${tag}.addTarget(self, action: #selector(${node.attrs.selector.replace(':','')}), for: .${node.attrs.eventType})\n`;
+                        }
+                    }
+                    return property
+                },
             },
             'common': {
+                'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n`},
                 'fontDescription': () => { return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
                 'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` }
             }
@@ -79,9 +96,20 @@ export class UIDeclarationsGen {
         else if (node.attrs.customColorSpace == 'displayP3') {
             declarion = `UIColor(displayP3Red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
         }
-        else  {
+        /*
+        else if (node.attrs.customColorSpace == 'calibratedWhite') {
+            declarion = `UIColor(white: ${node.attrs.white}, alpha: ${node.attrs.alpha})`
+        }
+        else if (node.attrs.customColorSpace == 'calibratedRGB') {
+            declarion = `UIColor(red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
+        }*/
+        else if (node.attrs.systemColor != undefined)  {
             declarion = `.${node.attrs.systemColor.replace('Color', '')}`
         }
+        else if (node.attrs.name != undefined) {
+            declarion = `.${node.attrs.name}`
+        }
+ 
         return declarion;
     }
 }
