@@ -11,4 +11,5 @@ function generate() {
     const output = document.getElementById("output-Text") as HTMLTextAreaElement;
     let viewcode = xib2viewcode(xib);
     output.value = viewcode;
+     
 }
