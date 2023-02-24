@@ -45,8 +45,11 @@ export class UIDeclarationsGen {
                     let property = `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
                     if (node.attrs.image != undefined) {
                         property += `\t${tag}.setImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
-                        return property;
                     }
+                    if (node.attrs.backgroundImage != undefined) {
+                        property += `\t${tag}.setBackgroundImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
+                    }
+                
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
@@ -61,6 +64,7 @@ export class UIDeclarationsGen {
                 'buttonConfiguration': () => { 
                     let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
                     property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .normal)\n`;
+
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
@@ -127,9 +131,13 @@ export class UIDeclarationsGen {
         if (node.attrs.catalog == 'system') {
             declarion = `UIImage(systemName: "${node.attrs.name}")`
         }
+        else if (node.attrs.backgroundImage != undefined) {
+            declarion =  node.attrs.catalog == 'system' ? `UIImage(systemName: "${node.attrs.backgroundImage}")` : `UIImage(named: "${node.attrs.backgroundImage}")`
+        }
         else if (node.attrs.name != undefined) {
             declarion = `UIImage(named: "${node.attrs.name}")`
         }
+      
         return declarion;
     }
 }
