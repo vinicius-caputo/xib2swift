@@ -41,18 +41,26 @@ export class UIDeclarationsGen {
     private resolveAdiionalConfiguration(tag: string, node: XibNode) {
         const addAditionalConfiguration: aditionalConfiguration = {
             'button': {
-                'state': () => {
-                    let property = `\t${tag}.setTitle("${node.attrs.title}", for: .${node.attrs.key})\n`;
+                'state': () => {                
+                    let property = `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
+                    if (node.attrs.image != undefined) {
+                        property += `\t${tag}.setImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
+                        return property;
+                    }
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
                             property += `\t${tag}.setTitleColor(${this.resolveColor(child)}, for: .${node.attrs.key})\n`
                         }
+                        else if (child.tag == 'imageReference') {
+                            property += `\t${tag}.setImage(${this.resolveImage(child)}, for: .${node.attrs.key})\n`
+                        }
                     }
                     return property;
                 },
                 'buttonConfiguration': () => { 
-                    let property = `\t${tag}.configuration = .${node.attrs.style}\n`;
+                    let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
+                    property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .normal)\n`;
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
@@ -72,6 +80,7 @@ export class UIDeclarationsGen {
                     return property
                 },
             },
+        
             'common': {
                 'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n`},
                 'fontDescription': () => { return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
@@ -110,6 +119,17 @@ export class UIDeclarationsGen {
             declarion = `.${node.attrs.name}`
         }
  
+        return declarion;
+    }
+    
+    private resolveImage(node: XibNode): string {
+        let declarion: string = '';
+        if (node.attrs.catalog == 'system') {
+            declarion = `UIImage(systemName: "${node.attrs.name}")`
+        }
+        else if (node.attrs.name != undefined) {
+            declarion = `UIImage(named: "${node.attrs.name}")`
+        }
         return declarion;
     }
 }
