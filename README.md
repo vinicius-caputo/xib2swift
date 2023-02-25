@@ -7,12 +7,15 @@ By deafult apple wants to make you use storyboard and xib files, but acros the y
 This tool wants to help to migrate projects from storyboard to swift code, and make possibile to build the UI in Interface Build and convert it to swift code.
 
 # Quick links
-[How to use](#how-to-use)
-[How it works](#how-it-works)
-[How to contribute](#how-to-contribute)
-[Found a Bug?](#issue)
-[Submitting an Issue](#submit-issue)
-[Submitting a Pull Request (PR)](#submit-pr)
+#### Website
+- [Online converter website](https://vinicius-caputo.github.io/xib2viewcode/)
+#### Docomentation
+- [How to use](#how-to-use)
+- [How it works](#how-it-works)
+- [How to contribute](#how-to-contribute)
+- [Found a Bug?](#issue)
+- [Submitting an Issue](#submit-issue)
+- [Submitting a Pull Request (PR)](#submit-pr)
 
 # <a name="how-to-use"></a> How to use 
 
@@ -44,7 +47,8 @@ After a merge request is accepted, the github actions will the build, the github
 
 ## <a name="issue"></a> Found a Bug?
 
-If you find a bug in the source code, you can help us by [submitting an issue](#submit-issue) to our [GitHub Repository][github].
+If you find a bug in the source code, you can help us by [submitting an issue](#submit-issue).
+
 Even better, you can [submit a Pull Request](#submit-pr) with a fix.
 
 ## <a name="submit-issue"></a> Submitting an Issue
@@ -74,4 +78,4 @@ Is necessary to add a description of the change in the commit message, and if yo
 
 [fix] - fix the bug #1.
 
-## Tank you for reading this, and I hope you enjoy this project!
+#### Tank you for reading this, and I hope you enjoy this project!
