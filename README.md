@@ -59,7 +59,7 @@ We want to fix all the issues as soon as possible, but before fixing, we need to
 
 Writte the issue in english, and try to be as descriptive as possible, and if you can, add a code example or a link to a repository that reproduces the problem.
 
-If you want a new feature is important to describe the problem or the feature that you want to solve, and if you can, add a code example or a link to a repository that reproduces the problem.
+If you want a new feature is important to describe the problem that you want to solve, and if you can, add a code example or a link to a repository that reproduces the problem.
 
 Additionally, is important to tag the issue with the correct label, to help us to identify the type of issue see the [labels section](https://github.com/vinicius-caputo/xib2viewcode/labels) to see the list of labels that match the type of issue.
 
@@ -67,15 +67,18 @@ Additionally, is important to tag the issue with the correct label, to help us t
 
 Depending on the type of change that you're committing, please add one of the following strings at the beginning of your commit messages:
 
-[feature] - for new features
-[improvement] - for improvements to existing features
-[fix] - for bug fixes
-[docs] - for changes and additions to the documentation
-[refactoring] - for refactoring the code, formatting, missing semi colons, no functional changes
-[website] - for changes to the website
+- [feature] - for new features
+- [improvement] - for improvements to existing features
+- [fix] - for bug fixes
+- [docs] - for changes and additions to the documentation
+- [refactoring] - for refactoring the code, formatting, missing semi colons, no functional changes
+- [website] - for changes to the website
 
-Is necessary to add a description of the change in the commit message, and if you are fixing a issue, add the issue number in the commit message, like the pattern:
+Is necessary to add a description of the change in the PR message, and if you are fixing a issue, add the issue number and text in the commit message, like the pattern:
 
 [fix] - fix the bug #1.
 
-#### Tank you for reading this, and I hope you enjoy this project!
+"fix the bug that was happening when the user click in the button and the website crash."
+
+----------
+Thank you for reading this, and I hope you enjoy this project!
