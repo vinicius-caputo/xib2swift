@@ -1,7 +1,8 @@
-body {
+body { 
+    min-height: 100vh; 
     background-color: whitesmoke;
-    width: 100vw;
-    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 #menu {
@@ -23,9 +24,7 @@ body {
     justify-content: center;
     width: 100%;
     height: 100%;
-    
     border-radius: 5px;
-    padding: 10px;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
     resize: none;
@@ -48,4 +47,19 @@ body {
 textarea {
     width: 100%;
     height: 100%;
+}
+
+
+@media screen and (max-width: 1024px) {
+    #box {
+        flex-wrap: wrap;
+    }
+    #firstbox {
+        width: 100%;
+        height: 50%;
+    }
+    #secondbox {
+        width: 100%;
+        height: 50%;
+    }
 }
