@@ -129,7 +129,7 @@ export class UIDeclarationsGen {
     private resolveImage(node: XibNode): string {
         let declarion: string = '';
         if (node.attrs.catalog == 'system') {
-            declarion = `UIImage(systemName: "${node.attrs.name}")`
+            declarion = `UIImage(systemName: "${node.attrs.image}")`
         }
         else if (node.attrs.backgroundImage != undefined) {
             declarion =  node.attrs.catalog == 'system' ? `UIImage(systemName: "${node.attrs.backgroundImage}")` : `UIImage(named: "${node.attrs.backgroundImage}")`
