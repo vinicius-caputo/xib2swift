@@ -53,7 +53,7 @@ export class UIDeclarationsGen {
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
-                            property += `\t${tag}.setTitleColor(${this.resolveColor(child)}, for: .${node.attrs.key})\n`
+                            property += `\t${tag}.${node.attrs.key}(${this.resolveColor(child)}, for: .${node.attrs.key})\n`
                         }
                         else if (child.tag == 'imageReference') {
                             property += `\t${tag}.setImage(${this.resolveImage(child)}, for: .${node.attrs.key})\n`
@@ -128,11 +128,11 @@ export class UIDeclarationsGen {
     
     private resolveImage(node: XibNode): string {
         let declarion: string = '';
-        if (node.attrs.catalog == 'system') {
-            declarion = `UIImage(systemName: "${node.attrs.image}")`
-        }
-        else if (node.attrs.backgroundImage != undefined) {
+        if (node.attrs.backgroundImage != undefined) {
             declarion =  node.attrs.catalog == 'system' ? `UIImage(systemName: "${node.attrs.backgroundImage}")` : `UIImage(named: "${node.attrs.backgroundImage}")`
+        }
+        else if (node.attrs.catalog == 'system') {
+            declarion = `UIImage(systemName: "${node.attrs.image}")`
         }
         else if (node.attrs.name != undefined) {
             declarion = `UIImage(named: "${node.attrs.name}")`
