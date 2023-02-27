@@ -42,7 +42,10 @@ export class UIDeclarationsGen {
         const addAditionalConfiguration: aditionalConfiguration = {
             'button': {
                 'state': () => {                
-                    let property = `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
+                    let property = ``;
+                    if (node.attrs.title != undefined) {
+                        property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
+                    }
                     if (node.attrs.image != undefined) {
                         property += `\t${tag}.setImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
                     }
@@ -136,6 +139,9 @@ export class UIDeclarationsGen {
         }
         else if (node.attrs.name != undefined) {
             declarion = `UIImage(named: "${node.attrs.name}")`
+        }
+        else if (node.attrs.image != undefined) {
+            declarion = `UIImage(named: "${node.attrs.image}")`
         }
       
         return declarion;
