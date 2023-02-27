@@ -73,7 +73,7 @@ export class UIDeclarationsGen {
                     }
                     return property;
                 },
-                'connections': () => {    
+                /*'connections': () => {    
                     let property = '';
                     let children = node.content;
                     for (const child of children) {
@@ -82,7 +82,7 @@ export class UIDeclarationsGen {
                         }
                     }
                     return property
-                },
+                },*/
             },
         
             'common': {
