@@ -41,7 +41,7 @@ export function xib2viewcode(xibFile: string): string {
 }
 
 
-const fs = require('fs');
-let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
-console.log(xib2viewcode(xibFile));
+// const fs = require('fs');
+// let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
+// console.log(xib2viewcode(xibFile));
 
