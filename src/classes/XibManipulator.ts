@@ -36,6 +36,12 @@ export class Xib {
                 if ('object' == typeof node) {
                     node.father = father;
                     node.content = this.clearEmptyNodes(node.content, node);
+                    if (node.tag == 'outlet') {
+                        this.outlets.push({
+                            property: node.attrs.property,
+                            id: node.attrs.destination
+                        });
+                    }
                     result.push(node);
                 }
             }
@@ -50,17 +56,13 @@ export class Xib {
     private navigateGettingInterestPoints(nodes: XibNode[]): void {
         for (const node of nodes) {
             this.tableIDtoName[node.attrs?.id] = node.tag + '__' + node?.attrs?.id?.replaceAll('-', '_');
+
             switch (node.tag) {
-                case 'outlet':
-                    this.outlets.push({
-                        property: node.attrs.property,
-                        id: node.attrs.destination
-                    });
-                    break;
                 case 'constraints':
                     this.constraints.push(node);
                     break;
                 case 'subviews':
+                    if (this.subviews.length == 0) this.resolveBaseView(node);
                     this.subviews.push(node);
                     break;
                 case 'viewLayoutGuide':
@@ -77,5 +79,13 @@ export class Xib {
             this.navigateGettingInterestPoints(node.content);
         }
     }    
+
+    private resolveBaseView(node: XibNode): void {
+        let father = node.father;
+        if (father == undefined) return;
+        if (father.tag != 'view' ){
+            this.tableIDtoName[father.attrs.id] = father.attrs.key;
+        }
+    }
 }
 

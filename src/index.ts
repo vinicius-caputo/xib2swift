@@ -1,7 +1,7 @@
 /*
 TODO:
 [x] Work with subviews inside views
-[] Work with non viewController components, like tableViewcell (base View)
+[x] Work with non viewController components, like tableViewcell (base View)
 [x] need to make the diference beteween the conjuction of default rules e rules
 [x] need to make constraints more modular because theathes it one pair of constraints 
 [x] fix constraints variations like multiplier enqualToConstant
@@ -41,7 +41,7 @@ export function xib2viewcode(xibFile: string): string {
 }
 
 
-// const fs = require('fs');
-// let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
-// console.log(xib2viewcode(xibFile));
+const fs = require('fs');
+let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
+console.log(xib2viewcode(xibFile));
 

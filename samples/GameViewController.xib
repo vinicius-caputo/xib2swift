@@ -9,20 +9,7 @@
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GameViewController" customModule="Jogo_da_Velha" customModuleProvider="target">
-            <connections>
-                <outlet property="b0" destination="Paj-w7-tLM" id="Cfy-aS-uzE"/>
-                <outlet property="b1" destination="05Q-Dz-NSy" id="Blp-hM-cD5"/>
-                <outlet property="b2" destination="aoi-lT-KeT" id="Fcb-n2-prr"/>
-                <outlet property="b3" destination="jip-Ex-p5O" id="GiU-5W-7n2"/>
-                <outlet property="b4" destination="J0v-E8-ghh" id="eHv-4k-ze3"/>
-                <outlet property="b5" destination="cUU-l9-3Uj" id="fdk-hY-z4v"/>
-                <outlet property="b6" destination="SPF-cv-b30" id="VBm-un-qr8"/>
-                <outlet property="b7" destination="1XL-5y-Vrs" id="plr-ak-rRX"/>
-                <outlet property="b8" destination="Dmb-uF-aP2" id="NCh-C8-Q7G"/>
-                <outlet property="resetButton" destination="6Gg-z0-Qg4" id="5gA-1b-7sK"/>
-                <outlet property="statusLabel" destination="JvG-QW-cxv" id="ZVM-bV-pBK"/>
-                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-            </connections>
+           
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
@@ -210,4 +197,18 @@
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
+     <connections>
+                <outlet property="b0" destination="Paj-w7-tLM" id="Cfy-aS-uzE"/>
+                <outlet property="b1" destination="05Q-Dz-NSy" id="Blp-hM-cD5"/>
+                <outlet property="b2" destination="aoi-lT-KeT" id="Fcb-n2-prr"/>
+                <outlet property="b3" destination="jip-Ex-p5O" id="GiU-5W-7n2"/>
+                <outlet property="b4" destination="J0v-E8-ghh" id="eHv-4k-ze3"/>
+                <outlet property="b5" destination="cUU-l9-3Uj" id="fdk-hY-z4v"/>
+                <outlet property="b6" destination="SPF-cv-b30" id="VBm-un-qr8"/>
+                <outlet property="b7" destination="1XL-5y-Vrs" id="plr-ak-rRX"/>
+                <outlet property="b8" destination="Dmb-uF-aP2" id="NCh-C8-Q7G"/>
+                <outlet property="resetButton" destination="6Gg-z0-Qg4" id="5gA-1b-7sK"/>
+                <outlet property="statusLabel" destination="JvG-QW-cxv" id="ZVM-bV-pBK"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+     </connections>
 </document>
