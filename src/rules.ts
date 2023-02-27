@@ -15,6 +15,7 @@ const rules: Rules = {
     stackView: {
         axis: 'axis',
     },
+    slider: {},
     imageView: {},
     common: {
         opaque: 'isOpaque',
