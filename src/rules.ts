@@ -1,4 +1,4 @@
-import { Rules } from "./types";
+import { Rules, XibNode } from "./types";
 import { lowerFirstletter } from "./Utils";
 
 const rules: Rules = {
@@ -38,6 +38,7 @@ export const defaultRules: any = {
 export function shouldIgnoreRule(tag: string, key: string): boolean {
     const propertyToIgnore: any = {
         button: ['buttonType', 'lineBreakMode'],
+        imageview: ['catalog'],
         common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
     }
     let ignoredRules =  propertyToIgnore['common'] + propertyToIgnore[tag];

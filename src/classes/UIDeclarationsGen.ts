@@ -17,9 +17,14 @@ export class UIDeclarationsGen {
                     if (resolveRule(node.tag, key) != undefined) {
                         let attributeDeclarion = `\t${node.tag}.${resolveRule(node.tag, key)} = ${resolveResultRule(attributes[key], key)}\n`;
                         if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
-
                         property += attributeDeclarion;
                     } else {
+
+                        if (node.tag == 'imageView' && key == 'image') {
+                            property += `\t${node.tag}.image = ${this.resolveImage(node)}\n`;
+                            continue;
+                        }
+
                         property += `\t${node.tag}.${key} = ${resolveResultRule(attributes[key], key)}\n`;
                     }
                 }
@@ -47,7 +52,7 @@ export class UIDeclarationsGen {
                         property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
                     }
                     if (node.attrs.image != undefined) {
-                        property += `\t${tag}.setImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
+                        property += `\t${tag}.setImage(${this.resolveImage(node)}, for: .${node.attrs.key})\n`;
                     }
                     if (node.attrs.backgroundImage != undefined) {
                         property += `\t${tag}.setBackgroundImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
@@ -76,16 +81,16 @@ export class UIDeclarationsGen {
                     }
                     return property;
                 },
-                /*'connections': () => {    
+                'connections': () => {    
                     let property = '';
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'action') {
-                            property += `\t${tag}.addTarget(self, action: #selector(${node.attrs.selector.replace(':','')}), for: .${node.attrs.eventType})\n`;
+                            property += `\t${tag}.addTarget(self, action: #selector(${child.attrs.selector.replace(':','')}), for: .${child.attrs.eventType})\n`;
                         }
                     }
                     return property
-                },*/
+                },
             },
         
             'common': {
@@ -123,7 +128,7 @@ export class UIDeclarationsGen {
             declarion = `.${node.attrs.systemColor.replace('Color', '')}`
         }
         else if (node.attrs.name != undefined) {
-            declarion = `.${node.attrs.name}`
+            declarion = `UIColor(named: "${node.attrs.name}")`
         }
  
         return declarion;
