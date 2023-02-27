@@ -15,6 +15,7 @@ const rules: Rules = {
     stackView: {
         axis: 'axis',
     },
+    imageView: {},
     common: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
