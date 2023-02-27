@@ -15,12 +15,13 @@ export class ConstraintsDeclaritonsGen {
                 continue
             }
 
-            if (node.attrs.secondItem == undefined) {
+            if ((node.attrs.firstAttribute == 'width' || node.attrs.secondAttribute == 'height') && node.attrs.secondItem == undefined) {
                 let grandFather = node.father?.father;
                 if (grandFather == undefined) { continue; }
                 propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
                 continue
             }
+
             let constant = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
             if (node.attrs.firstItem == undefined ) {
                 let grandFather = node.father?.father;
