@@ -15,7 +15,10 @@ const rules: Rules = {
     stackView: {
         axis: 'axis',
     },
-    slider: {},
+    slider: {
+        minValue: 'minimumValue',
+        maxValue: 'maximumValue',
+    },
     imageView: {},
     common: {
         opaque: 'isOpaque',
@@ -39,7 +42,7 @@ export const defaultRules: any = {
 export function shouldIgnoreRule(tag: string, key: string): boolean {
     const propertyToIgnore: any = {
         button: ['buttonType', 'lineBreakMode'],
-        imageView: ['catalog', 'clipSubviews'],
+        imageView: ['catalog', 'clipSubviews', 'clipsSubviews'],
         common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
     }
     let ignoredRules =  propertyToIgnore['common'] + propertyToIgnore[tag];

@@ -69,6 +69,18 @@ export class UIDeclarationsGen {
                     }
                     return property;
                 },
+                'fontDescription': () => { return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
+                'connections': () => {    
+                    let property = '';
+                    let children = node.content;
+                    for (const child of children) {
+                        if (child.tag == 'action') {
+                            property += `\t${tag}.addTarget(self, action: #selector(${child.attrs.selector.replace(':','')}), for: .${child.attrs.eventType})\n`;
+                        }
+                    }
+                    return property
+                },
+
                 'buttonConfiguration': () => { 
                     let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
                     property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .normal)\n`;
@@ -80,16 +92,6 @@ export class UIDeclarationsGen {
                         }
                     }
                     return property;
-                },
-                'connections': () => {    
-                    let property = '';
-                    let children = node.content;
-                    for (const child of children) {
-                        if (child.tag == 'action') {
-                            property += `\t${tag}.addTarget(self, action: #selector(${child.attrs.selector.replace(':','')}), for: .${child.attrs.eventType})\n`;
-                        }
-                    }
-                    return property
                 },
             },
         
