@@ -12,7 +12,7 @@ export class ConstraintsDeclaritonsGen {
                 if (grandFather == undefined) { continue; }
                 
                 if (node.attrs.secondItem == undefined) {
-                    `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
+                    propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
                     continue
                 }
                 propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor, multiplier: ${node.attrs.multiplier.replace(':','/')}),\n`;
