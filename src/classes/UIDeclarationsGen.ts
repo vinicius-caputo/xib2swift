@@ -70,17 +70,7 @@ export class UIDeclarationsGen {
                     return property;
                 },
                 'fontDescription': () => { return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
-                'connections': () => {    
-                    let property = '';
-                    let children = node.content;
-                    for (const child of children) {
-                        if (child.tag == 'action') {
-                            property += `\t${tag}.addTarget(self, action: #selector(${child.attrs.selector.replace(':','')}), for: .${child.attrs.eventType})\n`;
-                        }
-                    }
-                    return property
-                },
-
+               
                 'buttonConfiguration': () => { 
                     let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
                     property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .normal)\n`;
@@ -98,7 +88,17 @@ export class UIDeclarationsGen {
             'common': {
                 'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n`},
                 'fontDescription': () => { return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
-                'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` }
+                'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` },
+                'connections': () => {    
+                    let property = '';
+                    let children = node.content;
+                    for (const child of children) {
+                        if (child.tag == 'action') {
+                            property += `\t${tag}.addTarget(self, action: #selector(${child.attrs.selector.replace(':','')}), for: .${child.attrs.eventType})\n`;
+                        }
+                    }
+                    return property
+                },
             }
         }
         
