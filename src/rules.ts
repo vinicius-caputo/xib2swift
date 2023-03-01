@@ -7,7 +7,6 @@ const rules: Rules = {
         textAlignment: 'textAlignment',
         numberOfLines: 'numberOfLines',
         baselineAdjustment: 'baselineAdjustment',
-        adjustsLetterSpacingToFitWidth: 'adjustsLetterSpacingToFitWidth',
         adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
     },
     button: {},
@@ -19,7 +18,12 @@ const rules: Rules = {
         minValue: 'minimumValue',
         maxValue: 'maximumValue',
     },
+    tableView: {},
+    collectionView: {
+        multipleTouchEnabled: 'isMultipleTouchEnabled',
+    },
     imageView: {},
+    pageControl: {},
     common: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
@@ -41,9 +45,12 @@ export const defaultRules: any = {
 
 export function shouldIgnoreRule(tag: string, key: string): boolean {
     const propertyToIgnore: any = {
+        label: ['minimumFontSize'],
         button: ['buttonType', 'lineBreakMode'],
-        imageView: ['catalog', 'clipSubviews', 'clipsSubviews'],
-        common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id'],
+        imageView: ['catalog'],
+        tableView: ['style'],
+        collectionView: ['dataMode'],
+        common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id',  'clipsSubviews', 'adjustsLetterSpacingToFitWidth'],
     }
     let ignoredRules =  propertyToIgnore['common'] + propertyToIgnore[tag];
     return ignoredRules.includes(key);

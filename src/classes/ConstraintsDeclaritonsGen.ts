@@ -12,7 +12,7 @@ export class ConstraintsDeclaritonsGen {
                 if (grandFather == undefined) {  console.log('error');
                  continue; }
     
-                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor, multiplier: ${node.attrs.multiplier.replace(':','/')}),\n`;
+                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor, multiplier: ${node.attrs.multiplier.replace(':','/')}),\n`;
                 continue
             }
 
@@ -32,7 +32,7 @@ export class ConstraintsDeclaritonsGen {
                     console.log('error3');
                     continue; }
 
-                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor${constant}),\n`;
+                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor${constant}),\n`;
                 continue;
             }
     
@@ -40,7 +40,7 @@ export class ConstraintsDeclaritonsGen {
             if (node.attrs.multiplier != undefined) {
                 constant += `, multiplier: ${node.attrs.multiplier}`;
             }
-            propertys += `\t${resolveIdToPropetyName(node.attrs.firstItem)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute}Anchor${constant}),\n`;
+            propertys += `\t${resolveIdToPropetyName(node.attrs.firstItem)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor${constant}),\n`;
         }
         return `NSLayoutConstraint.activate([${propertys}])\n`;
     }

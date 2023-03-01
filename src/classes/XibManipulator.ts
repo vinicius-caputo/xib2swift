@@ -82,8 +82,12 @@ export class Xib {
 
     private resolveBaseView(node: XibNode): void {
         let father = node.father;
+        console.log(father);
         if (father == undefined) return;
-        if (father.tag != 'view' ){
+        if (father.attrs.id == undefined ){
+            father.attrs.id = father.father?.attrs.id ?? 'baseView';
+        }
+        if (father.attrs.key != undefined ){
             this.tableIDtoName[father.attrs.id] = father.attrs.key;
         }
     }

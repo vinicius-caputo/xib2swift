@@ -29,7 +29,7 @@ export class UIDeclarationsGen {
                     }
                 }
                 property += `${this.doAditionalConfiguration(node.tag, node.content)}`;
-                uiDeclarations += `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n`;
+                uiDeclarations += `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
             }
         }
         return uiDeclarations;
@@ -69,7 +69,9 @@ export class UIDeclarationsGen {
                     }
                     return property;
                 },
-                'fontDescription': () => { return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
+                'fontDescription': () => { 
+                    let weight = node.attrs.weight != undefined ? `, weight: .${node.attrs.weight}` : '';
+                    return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` },
                
                 'buttonConfiguration': () => { 
                     let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
@@ -84,11 +86,30 @@ export class UIDeclarationsGen {
                     return property;
                 },
             },
-        
+           'collectionView': {
+                'collectionViewFlowLayout': () => {
+                    let property = '\tlet layout = UICollectionViewFlowLayout()\n';
+                    let ignoredAttributes = ['id', 'key'];
+                    let attributes = node.attrs;
+                    for (const key in attributes) {
+                        if (ignoredAttributes.includes(key)) continue;
+                        property += `\tlayout.${key} = ${resolveResultRule(attributes[key], key)}\n`;
+                    }
+                    for (const child of node.content) {
+                        if (child.tag == 'size') {
+                            property += `\tlayout.${child.attrs.key} = CGSize(width: ${child.attrs.width}, height: ${child.attrs.height})\n`;
+                        }
+                    }
+                    property += `\t${tag}.collectionViewLayout = layout\n`;
+                    return property;
+                },
+           },
             'common': {
                 'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n`},
-                'fontDescription': () => { return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize})\n` },
-                'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` },
+                'fontDescription': () => { 
+                    let weight = node.attrs.weight != undefined ? `, weight: .${node.attrs.weight}` : '';
+                    return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` },
+                //'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` },
                 'connections': () => {    
                     let property = '';
                     let children = node.content;
