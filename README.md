@@ -1,6 +1,6 @@
-# Xib2ViewCode
+# xib2swift
 
-The xib2viewcode is a tool to convert xib files that created by Interface Builder to swift code. 
+The xib2swift is a tool to convert xib files that created by Interface Builder to swift code. 
 
 By deafult apple wants to make you use storyboard and xib files, but acros the years the way the community make their projects in most cases dont use storyboard, they prefer to write the UI code in swift, because it is more readable and maintainable, and has better build time.
 
