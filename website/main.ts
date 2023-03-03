@@ -1,4 +1,4 @@
-import { xib2viewcode } from "../src/index";
+import { xib2viewcode } from "../src/xib2viewcode";
 
 const button = document.getElementById("generate-button") as HTMLButtonElement;
 

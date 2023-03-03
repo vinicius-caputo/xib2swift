@@ -1,47 +1,51 @@
-/*
-TODO:
-[x] Work with subviews inside views
-[x] Work with non viewController components, like tableViewcell (base View)
-[x] need to make the diference beteween the conjuction of default rules e rules
-[x] need to make constraints more modular because theathes it one pair of constraints 
-[x] fix constraints variations like multiplier enqualToConstant
-*/
+import { xib2viewcode } from './xib2viewcode';
+import { argv } from 'process';
 
-import { UIDeclarationsGen } from './classes/UIDeclarationsGen';
-import { ViewHierachyGen } from './classes/ViewHierachyGen';
-import { ConstraintsDeclaritonsGen } from './classes/ConstraintsDeclaritonsGen';
-import { Xib } from './classes/XibManipulator';
-
-
-export function xib2viewcode(xibFile: string): string {
-
-    const xib = Xib.getInstance();
-    xib.create(xibFile);
-
-    const uiDeclarationsGen = new UIDeclarationsGen();
-    const viewHierchyGen = new ViewHierachyGen();
-    const constraintsDeclarationsGen = new ConstraintsDeclaritonsGen();
-    
-    let uiDeclarations = '';
-    for (const subview of xib.subviews) {
-        uiDeclarations+= uiDeclarationsGen.generateUIDeclarations(subview.content);
+function resolveArgs() {
+    if (argv.length < 3) {
+        console.log('Usage: xib2viewcode <path-to-xib-file>');
+        process.exit(1);
     }
+    let path = argv[2];
+    let string = '';
+    let outputPath = '';
+    argv.forEach((val, index) => {
+        if (val == '-h' || val == '--help') {
+            console.log('Basic usage: xib2viewcode <path-to-xib-file>');
+            console.log('Options:');
+            console.log(' -p, --path <path-to-xib-file>  Path to xib file');
+            console.log(' -o, --outputPath <path-to-output-file>  Path to output file');
+            console.log(' -s, --string <xib-string>  xib string');
+            console.log(' -h, --help  Display this help message');
+            process.exit(0);
+        }
+        else if (val == '-p' || val == '--path') {
+            path = argv[index + 1];
+        }
+        else if (val == "-s" || val == "--string") {
+            string = argv[index + 1];
+        }
+        else if (val == '-o' || val == '--outputPath') {
+            outputPath = argv[index + 1];
+        }
+    });
 
-    let constraintsDeclarations = '';
-    for (const constraint of xib.constraints) {
-        constraintsDeclarations += constraintsDeclarationsGen.genertaeConstraintsDeclarations(constraint.content);
+    let convertedCode = '';
+    if (string != '') {
+        convertedCode = xib2viewcode(string);
+    }
+    else if (path != '') {
+        const fs = require('fs');
+        let xibFile = fs.readFileSync(path, 'utf8')
+        convertedCode = xib2viewcode(xibFile);
     }
     
-    let viewHierachy = '';
-    for (const subview of xib.subviews.reverse()) {
-        viewHierachy += viewHierchyGen.generateViewHierachy(subview);
+    if (outputPath != '') {
+        const fs = require('fs');
+        fs.writeFileSync(outputPath.replace(".swift",'')+".swift", convertedCode);
     }
     
-    return uiDeclarations + '\n----------------------------\n' + viewHierachy + '\n----------------------------\n' + constraintsDeclarations;
+    console.log(convertedCode);
 }
 
-
-// const fs = require('fs');
-// let xibFile = fs.readFileSync('./samples/GameViewController.xib', 'utf8');
-// console.log(xib2viewcode(xibFile));
-
+resolveArgs();

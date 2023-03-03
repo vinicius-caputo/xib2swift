@@ -13,7 +13,6 @@ export class Xib {
     public subviews: XibNode[] = [];
     public tableIDtoName: IDtoName = {};
 
-
     private constructor() {}   
     
     public static getInstance(): Xib {
@@ -82,7 +81,6 @@ export class Xib {
 
     private resolveBaseView(node: XibNode): void {
         let father = node.father;
-        console.log(father);
         if (father == undefined) return;
         if (father.attrs.id == undefined ){
             father.attrs.id = father.father?.attrs.id ?? 'baseView';
