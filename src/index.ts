@@ -1,9 +1,9 @@
-import { xib2viewcode } from './xib2viewcode';
+import { xib2swift } from './xib2swift';
 import { argv } from 'process';
 
 function resolveArgs() {
     if (argv.length < 3) {
-        console.log('Usage: xib2viewcode <path-to-xib-file>');
+        console.log('Usage: xib2swift <path-to-xib-file>');
         process.exit(1);
     }
     let path = argv[2];
@@ -11,7 +11,7 @@ function resolveArgs() {
     let outputPath = '';
     argv.forEach((val, index) => {
         if (val == '-h' || val == '--help') {
-            console.log('Basic usage: xib2viewcode <path-to-xib-file>');
+            console.log('Basic usage: xib2swift <path-to-xib-file>');
             console.log('Options:');
             console.log(' -p, --path <path-to-xib-file>  Path to xib file');
             console.log(' -o, --outputPath <path-to-output-file>  Path to output file');
@@ -32,12 +32,12 @@ function resolveArgs() {
 
     let convertedCode = '';
     if (string != '') {
-        convertedCode = xib2viewcode(string);
+        convertedCode = xib2swift(string);
     }
     else if (path != '') {
         const fs = require('fs');
         let xibFile = fs.readFileSync(path, 'utf8')
-        convertedCode = xib2viewcode(xibFile);
+        convertedCode = xib2swift(xibFile);
     }
     
     if (outputPath != '') {

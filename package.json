@@ -1,5 +1,5 @@
 {
-  "name": "xib2viewcode",
+  "name": "xib2swift",
   "devDependencies": {
     "@types/node": "^18.11.9",
     "ts-loader": "^9.4.2",
@@ -20,7 +20,8 @@
   },
   "scripts": {
     "build-web": "webpack --config webpack.config.js ",
-    "build-release": "tsc | pkg .",
+    "build-release": "tsc && pkg .",
+    "build": "npm run build-web && npm run build-release",
     "watch": "webpack --config webpack.config.js --watch"
   }
 }
