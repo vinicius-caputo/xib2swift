@@ -1,6 +1,7 @@
 import { aditionalConfiguration, XibNode } from "../types";
 import { resolveRule, resolveResultRule, shouldIgnoreRule, aceptedTags, defaultRules } from "../rules";
-import { capitalizeFirstLetter, resolveIdToPropetyName } from "../Utils";
+import { capitalizeFirstLetter } from "../Utils";
+import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class UIDeclarationsGen {
 

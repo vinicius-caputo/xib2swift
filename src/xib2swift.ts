@@ -5,8 +5,7 @@ import { Xib } from './classes/XibManipulator';
 
 export function xib2swift(xibFile: string): string {
 
-    const xib = Xib.getInstance();
-    xib.create(xibFile);
+    const xib = new Xib(xibFile);
 
     const uiDeclarationsGen = new UIDeclarationsGen();
     const viewHierchyGen = new ViewHierachyGen();
@@ -17,10 +16,7 @@ export function xib2swift(xibFile: string): string {
         uiDeclarations+= uiDeclarationsGen.generateUIDeclarations(subview.content);
     }
 
-    let constraintsDeclarations = '';
-    for (const constraint of xib.constraints) {
-        constraintsDeclarations += constraintsDeclarationsGen.genertaeConstraintsDeclarations(constraint.content);
-    }
+    let constraintsDeclarations = constraintsDeclarationsGen.generateConstraintsDeclarations(xib.constraints);
     
     let viewHierachy = '';
     for (const subview of xib.subviews.reverse()) {
@@ -29,5 +25,4 @@ export function xib2swift(xibFile: string): string {
     
     return uiDeclarations + '\n----------------------------\n' + viewHierachy + '\n----------------------------\n' + constraintsDeclarations;
 }
-
 

@@ -1,9 +1,6 @@
 import { XibNode, IDtoName, Outlet } from '../types';
 import { parser } from 'posthtml-parser'
 
-/**
- * Singleton class responsible for manipulate the xib file
- */
 export class Xib {
     public static instace: Xib;
 
@@ -13,20 +10,12 @@ export class Xib {
     public subviews: XibNode[] = [];
     public tableIDtoName: IDtoName = {};
 
-    private constructor() {}   
-    
-    public static getInstance(): Xib {
-        if (Xib.instace == undefined) {
-            Xib.instace = new Xib();
-        }
-        return Xib.instace;
-    }
-
-    public create(xib: string): void {
+    public constructor(xib: string) {
         this.xibNodes = parser(xib, { xmlMode: true }) as XibNode[];
         this.xibNodes = this.clearEmptyNodes(this.xibNodes);
         this.navigateGettingInterestPoints(this.xibNodes);
-    }
+        Xib.instace = this;
+    }   
 
     private clearEmptyNodes(nodes: XibNode[], father?: XibNode): XibNode[] {
         let result: XibNode[] = [];
@@ -89,5 +78,10 @@ export class Xib {
             this.tableIDtoName[father.attrs.id] = father.attrs.key;
         }
     }
+    
+}
+
+export function resolveIdToPropetyName(id: string): string {
+    return Xib.instace.tableIDtoName[id];
 }
 

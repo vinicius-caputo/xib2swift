@@ -1,47 +1,104 @@
-import { XibNode } from "../types";
-import { resolveIdToPropetyName } from "../Utils";
+import { XibNode, Constraint, Constraints } from "../types";
+import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class ConstraintsDeclaritonsGen {
-    public genertaeConstraintsDeclarations(nodes: XibNode[]): string {
-        let propertys: string = '\n';
-        
-        for (const node of nodes) {
-            
-            if ((node.attrs.secondAttribute == 'width' || node.attrs.secondAttribute == 'height') && node.attrs.multiplier != undefined) {
-                let grandFather = node.father?.father;
-                if (grandFather == undefined) {  console.log('error');
-                 continue; }
-    
-                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor, multiplier: ${node.attrs.multiplier.replace(':','/')}),\n`;
-                continue
-            }
 
-            if ((node.attrs.firstAttribute == 'width' || node.attrs.firstAttribute == 'height') && node.attrs.secondItem == undefined) {
-                let grandFather = node.father?.father;
-                if (grandFather == undefined) { 
-                    console.log('error2');
-                    continue; }
-                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalToConstant: ${node.attrs.constant}),\n`;
-                continue
-            }
+    private constraints: Constraints 
 
-            let constant = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
-            if (node.attrs.firstItem == undefined ) {
-                let grandFather = node.father?.father;
-                if (grandFather == undefined) { 
-                    console.log('error3');
-                    continue; }
+    public constructor() {
+        this.constraints =  {};
+    }
 
-                propertys += `\t${resolveIdToPropetyName(grandFather.attrs.id)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor${constant}),\n`;
-                continue;
-            }
-    
-           
-            if (node.attrs.multiplier != undefined) {
-                constant += `, multiplier: ${node.attrs.multiplier}`;
-            }
-            propertys += `\t${resolveIdToPropetyName(node.attrs.firstItem)}.${node.attrs.firstAttribute}Anchor.constraint(equalTo: ${resolveIdToPropetyName(node.attrs.secondItem)}.${node.attrs.secondAttribute.replace('Margin','')}Anchor${constant}),\n`;
+    public generateConstraintsDeclarations(nodes: XibNode[]): string {
+        for (const constraint of nodes) {
+            this.resolveConstraintsDeclarations(constraint.content);
         }
-        return `NSLayoutConstraint.activate([${propertys}])\n`;
+        return `NSLayoutConstraint.activate([${this.organizeConstraintsDeclarations()}])\n`;
+    }
+
+    private resolveConstraintsDeclarations(nodes: XibNode[]): void {
+
+        for (const node of nodes) { 
+            
+            let grandFather = node.father?.father;
+            if (grandFather == undefined) { console.log('\nerror\n'); continue; }
+
+            let parameters = node.attrs.constant != undefined ? `, constant: ${node.attrs.constant}` : '';
+            parameters += node.attrs.multiplier != undefined ? `, multiplier: ${node.attrs.multiplier.replace(':','/')}` : '';
+            
+            if ((node.attrs.firstAttribute == 'width' || node.attrs.firstAttribute == 'height') && node.attrs.secondItem == undefined) {
+                this.generateConstraintWithConstant(
+                /*   element  */    resolveIdToPropetyName(grandFather.attrs.id),
+                /*    anchor  */    node.attrs.firstAttribute,
+                /*   constant  */   node.attrs.constant );
+            }
+            else if (node.attrs.firstItem == undefined) {
+                this.generateConstraint(
+                /*   element  */    resolveIdToPropetyName(grandFather.attrs.id),
+                /*    anchor  */    node.attrs.firstAttribute,
+                /* secondElement */ resolveIdToPropetyName(node.attrs.secondItem),
+                /* secondAnchor  */ node.attrs.secondAttribute.replace('Margin', ''),
+                /*   parameters  */ parameters );
+            }
+            else {
+                this.generateConstraint(
+                /*   element  */    resolveIdToPropetyName(node.attrs.firstItem),
+                /*    anchor  */    node.attrs.firstAttribute,
+                /* secondElement */ resolveIdToPropetyName(node.attrs.secondItem),
+                /* secondAnchor  */ node.attrs.secondAttribute.replace('Margin', ''),
+                /*   parameters  */ parameters );
+            }
+        }
+    }
+
+    private generateConstraint(element: string, anchor: string, secondElement: string, secondAnchor: string, parameters: string): void {
+        if (anchor == 'bottom' || anchor == 'trailing') {
+            this.pushConstraint(secondElement, {
+                anchor: secondAnchor,
+                declaration: `\t${secondElement}.${secondAnchor}Anchor.constraint(equalTo: ${element}.${anchor}Anchor${parameters.replace('constant: ', 'constant: -')}),\n`
+            });
+            return
+        }
+        this.pushConstraint(element, {
+            anchor: anchor,
+            declaration: `\t${element}.${anchor}Anchor.constraint(equalTo: ${secondElement}.${secondAnchor}Anchor${parameters}),\n`
+        });
+    }
+
+    private generateConstraintWithConstant(element: string, anchor: string, constant: string): void {
+        this.pushConstraint(element, {
+            anchor: anchor,
+            declaration: `\t${element}.${anchor}Anchor.constraint(equalToConstant: ${constant}),\n`
+        });
+    }
+
+    private pushConstraint(element: string, constraint: Constraint): void {
+        this.constraints[element] = this.constraints[element] || [];
+        this.constraints[element].push(constraint);
+    }
+
+    private organizeConstraintsDeclarations(): string {
+        let declarations = '\n';
+        for (const key in this.constraints) {
+            let constraints = this.orderWithAnchor(this.constraints[key]);
+            for (const constraint of constraints) {
+                declarations += constraint.declaration;
+            }
+            declarations += '\n';
+        }
+        return declarations;
+    }
+
+    private orderWithAnchor(constraints: Constraint[]): Constraint[] {
+        let order = ['top', 'bottom', 'leading', 'trailing', 'centerX', 'centerY', 'width', 'height'];
+        let orderedConstraints: Constraint[] = [];
+        for (const anchor of order) {
+            for (const constraint of constraints) {
+                if (constraint.anchor == anchor) {
+                    orderedConstraints.push(constraint);
+                }
+            }
+        }
+        return orderedConstraints;
     }
 }

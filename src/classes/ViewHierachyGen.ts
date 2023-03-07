@@ -1,6 +1,6 @@
 import { aceptedTags } from "../rules";
 import { XibNode } from "../types";
-import { resolveIdToPropetyName } from "../Utils";
+import { resolveIdToPropetyName } from "./XibManipulator"
 
 export class ViewHierachyGen {
     public generateViewHierachy(subview: XibNode){

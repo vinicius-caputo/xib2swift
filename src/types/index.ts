@@ -24,8 +24,18 @@ export interface Rules {
         [key: string]: string
     }
 }
+
 export interface aditionalConfiguration {
     [tag: string]: {
         [key: string]: () => string
     }
+}
+
+export interface Constraints {
+    [element: string]: Constraint[]
+}
+
+export interface Constraint {
+    anchor: string,
+    declaration: string
 }
