@@ -8,7 +8,7 @@ This tool wants to help to migrate projects from storyboard to swift code, and m
 
 # Quick links
 #### Website
-- [Online converter website](https://vinicius-caputo.github.io/xib2viewcode/)
+- [Online converter website](https://vinicius-caputo.github.io/xib2swift/)
 #### Docomentation
 - [How to use](#how-to-use)
 - [How it works](#how-it-works)
