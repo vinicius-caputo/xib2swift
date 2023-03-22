@@ -3,17 +3,11 @@ import { lowerFirstletter } from "./Utils";
 
 const rules: Rules = {
     label: {
-        text: 'text',
-        textAlignment: 'textAlignment',
-        numberOfLines: 'numberOfLines',
-        baselineAdjustment: 'baselineAdjustment',
         adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
     },
     button: {},
     view: {},
-    stackView: {
-        axis: 'axis',
-    },
+    stackView: {},
     slider: {
         minValue: 'minimumValue',
         maxValue: 'maximumValue',
@@ -27,12 +21,10 @@ const rules: Rules = {
     common: {
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
-        contentMode: 'contentMode',
-        translatesAutoresizingMaskIntoConstraints: 'translatesAutoresizingMaskIntoConstraints',
     }
 }
 
-export const aceptedTags: string[] = Object.keys(rules);
+export const ignoredTags: string[] = []
 
 export function resolveRule(tag: string, key: string): string {
     return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? undefined;

@@ -1,5 +1,5 @@
 import { aditionalConfiguration, XibNode } from "../types";
-import { resolveRule, resolveResultRule, shouldIgnoreRule, aceptedTags, defaultRules } from "../rules";
+import { resolveRule, resolveResultRule, shouldIgnoreRule, ignoredTags, defaultRules } from "../rules";
 import { capitalizeFirstLetter } from "../Utils";
 import { resolveIdToPropetyName } from "./XibManipulator";
 
@@ -8,7 +8,7 @@ export class UIDeclarationsGen {
     public generateUIDeclarations(nodes: XibNode[]): string {
         let uiDeclarations: string = '';
         for (const node of nodes) {
-            if (aceptedTags.includes(node.tag)) {
+            if (!ignoredTags.includes(node.tag)) {
                 let attributes = node.attrs;
                 let property: string = '\n';
                 for (const key in attributes) {
@@ -44,7 +44,7 @@ export class UIDeclarationsGen {
         return property;
     }
 
-    private resolveAdiionalConfiguration(tag: string, node: XibNode) {
+    private resolveAdiionalConfiguration(tag: string, node: XibNode): string {
         const addAditionalConfiguration: aditionalConfiguration = {
             'button': {
                 'state': () => {                
@@ -141,7 +141,7 @@ export class UIDeclarationsGen {
         else if (node.attrs.customColorSpace == 'displayP3') {
             declarion = `UIColor(displayP3Red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
         }
-        /*
+        /* not tested
         else if (node.attrs.customColorSpace == 'calibratedWhite') {
             declarion = `UIColor(white: ${node.attrs.white}, alpha: ${node.attrs.alpha})`
         }

@@ -1,4 +1,4 @@
-import { aceptedTags } from "../rules";
+import { ignoredTags } from "../rules";
 import { XibNode } from "../types";
 import { resolveIdToPropetyName } from "./XibManipulator"
 
@@ -8,7 +8,7 @@ export class ViewHierachyGen {
         let fatherId = subview.father?.attrs.id;
         if (!fatherId) { return; }
         for (const node of subview.content) {
-            if (aceptedTags.includes(node.tag)) {
+            if (!ignoredTags.includes(node.tag)) {
                 heriachyDeclaration += `${resolveIdToPropetyName(fatherId)}.addSubview(${resolveIdToPropetyName(node.attrs.id)})\n`;
             }
         }
