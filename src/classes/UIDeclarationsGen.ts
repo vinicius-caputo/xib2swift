@@ -1,50 +1,61 @@
 import { aditionalConfiguration, XibNode } from "../types";
-import { resolveRule, resolveResultRule, shouldIgnoreRule, ignoredTags, defaultRules } from "../rules";
+import { shouldIgnoreProperty, ignoredTags, defaultRules } from "../rules";
+import { Resolve } from "./CommonResolve";
 import { capitalizeFirstLetter } from "../Utils";
 import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class UIDeclarationsGen {
 
-    public generateUIDeclarations(nodes: XibNode[]): string {
+    public generateUIDeclarations(subviews: XibNode[]): string {
         let uiDeclarations: string = '';
-        for (const node of nodes) {
-            if (!ignoredTags.includes(node.tag)) {
-                let attributes = node.attrs;
-                let property: string = '\n';
-                for (const key in attributes) {
-
-                    if (shouldIgnoreRule(node.tag, key)) continue;
-
-                    if (resolveRule(node.tag, key) != undefined) {
-                        let attributeDeclarion = `\t${node.tag}.${resolveRule(node.tag, key)} = ${resolveResultRule(attributes[key], key)}\n`;
-                        if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
-                        property += attributeDeclarion;
-                    } else {
-
-                        if (node.tag == 'imageView' && key == 'image') {
-                            property += `\t${node.tag}.image = ${this.resolveImage(node)}\n`;
-                            continue;
-                        }
-
-                        property += `\t${node.tag}.${key} = ${resolveResultRule(attributes[key], key)}\n`;
-                    }
-                }
-                property += `${this.doAditionalConfiguration(node.tag, node.content)}`;
-                uiDeclarations += `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
-            }
+        for (const subview of subviews) {
+            uiDeclarations += this.resolveUIDeclaration(subview.content);
         }
         return uiDeclarations;
     }
 
-    private doAditionalConfiguration(tag: string, nodes: XibNode[]): string {
-        let property: string = '';
+    private resolveUIDeclaration(nodes: XibNode[]): string {
+        let uiDeclarations: string = '';
+        nodes = nodes.filter(node => ignoredTags.includes(node.tag) == false);
+    
         for (const node of nodes) {
-            property += this.resolveAdiionalConfiguration(tag, node);
+            let property: string = this.resolveAtributes(node);
+            property += `${this.generateDeclarationForSubNodes(node.tag, node.content)}`;
+            uiDeclarations += `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
+        }
+        return uiDeclarations;
+    }
+
+    private resolveAtributes(node: XibNode): string {
+        let attributes = node.attrs;
+        let property: string = '\n';
+    
+        for (const key in attributes)  {
+            if (shouldIgnoreProperty(node.tag, key)) continue;
+            if (Resolve.propertyName(node.tag, key) != undefined) {
+                let attributeDeclarion = `\t${node.tag}.${Resolve.propertyName(node.tag, key)} = ${Resolve.resultValue(attributes[key], key)}\n`;
+                if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
+                property += attributeDeclarion;
+            } else {
+                if (node.tag == 'imageView' && key == 'image') {
+                    property += `\t${node.tag}.image = ${Resolve.Image(node)}\n`;
+                    continue;
+                }
+                property += `\t${node.tag}.${key} = ${Resolve.resultValue(attributes[key], key)}\n`;
+            }
         }
         return property;
     }
 
-    private resolveAdiionalConfiguration(tag: string, node: XibNode): string {
+    private generateDeclarationForSubNodes(tag: string, nodes: XibNode[]): string {
+        let property: string = '';
+        for (const node of nodes) {
+            property += this.resolveSubNode(tag, node);
+        }
+        return property;
+    }
+
+    private resolveSubNode(tag: string, node: XibNode): string {
         const addAditionalConfiguration: aditionalConfiguration = {
             'button': {
                 'state': () => {                
@@ -53,19 +64,19 @@ export class UIDeclarationsGen {
                         property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
                     }
                     if (node.attrs.image != undefined) {
-                        property += `\t${tag}.setImage(${this.resolveImage(node)}, for: .${node.attrs.key})\n`;
+                        property += `\t${tag}.setImage(${Resolve.Image(node)}, for: .${node.attrs.key})\n`;
                     }
                     if (node.attrs.backgroundImage != undefined) {
-                        property += `\t${tag}.setBackgroundImage(${this.resolveImage(node)}), for: .${node.attrs.key})\n`;
+                        property += `\t${tag}.setBackgroundImage(${Resolve.Image(node)}), for: .${node.attrs.key})\n`;
                     }
                 
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
-                            property += `\t${tag}.${node.attrs.key}(${this.resolveColor(child)}, for: .${node.attrs.key})\n`
+                            property += `\t${tag}.${node.attrs.key}(${Resolve.Color(child)}, for: .${node.attrs.key})\n`
                         }
                         else if (child.tag == 'imageReference') {
-                            property += `\t${tag}.setImage(${this.resolveImage(child)}, for: .${node.attrs.key})\n`
+                            property += `\t${tag}.setImage(${Resolve.Image(child)}, for: .${node.attrs.key})\n`
                         }
                     }
                     return property;
@@ -81,7 +92,7 @@ export class UIDeclarationsGen {
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
-                            property += `\t${tag}.configuration?.${child.attrs.key} = ${this.resolveColor(child)}\n`;
+                            property += `\t${tag}.configuration?.${child.attrs.key} = ${Resolve.Color(child)}\n`;
                         }
                     }
                     return property;
@@ -94,7 +105,7 @@ export class UIDeclarationsGen {
                     let attributes = node.attrs;
                     for (const key in attributes) {
                         if (ignoredAttributes.includes(key)) continue;
-                        property += `\tlayout.${key} = ${resolveResultRule(attributes[key], key)}\n`;
+                        property += `\tlayout.${key} = ${Resolve.resultValue(attributes[key], key)}\n`;
                     }
                     for (const child of node.content) {
                         if (child.tag == 'size') {
@@ -106,10 +117,11 @@ export class UIDeclarationsGen {
                 },
            },
             'common': {
-                'color': () => { return `\t${tag}.${node.attrs.key} = ${this.resolveColor(node)}\n`},
+                'color': () => { return `\t${tag}.${node.attrs.key} = ${Resolve.Color(node)}\n`},
                 'fontDescription': () => { 
                     let weight = node.attrs.weight != undefined ? `, weight: .${node.attrs.weight}` : '';
-                    return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` },
+                    return `\t${tag}.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` 
+                },
                 //'rect': () => { return `\t${tag}.frame = CGRect(x: ${node.attrs.x}, y: ${node.attrs.y}, width: ${node.attrs.width}, height: ${node.attrs.height})\n` },
                 'connections': () => {    
                     let property = '';
@@ -128,51 +140,5 @@ export class UIDeclarationsGen {
             return addAditionalConfiguration['common'][node.tag] != undefined ? addAditionalConfiguration['common'][node.tag]() : ''
         }
         return addAditionalConfiguration[tag][node.tag] != undefined ? addAditionalConfiguration[tag][node.tag]() : ''
-    }
-
-    private resolveColor(node: XibNode): string {
-        let declarion: string = '';
-        if (node.attrs.customColorSpace == 'genericGamma22GrayColorSpace') {
-            declarion = `UIColor(cgColor: CGColor(genericGrayGamma2_2Gray: ${node.attrs.white}, alpha: ${node.attrs.alpha}))`;
-        }
-        else if (node.attrs.customColorSpace == 'sRGB') {
-            declarion = `UIColor(cgColor: CGColor(srgbRed: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha}))`
-        }
-        else if (node.attrs.customColorSpace == 'displayP3') {
-            declarion = `UIColor(displayP3Red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
-        }
-        /* not tested
-        else if (node.attrs.customColorSpace == 'calibratedWhite') {
-            declarion = `UIColor(white: ${node.attrs.white}, alpha: ${node.attrs.alpha})`
-        }
-        else if (node.attrs.customColorSpace == 'calibratedRGB') {
-            declarion = `UIColor(red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
-        }*/
-        else if (node.attrs.systemColor != undefined)  {
-            declarion = `.${node.attrs.systemColor.replace('Color', '')}`
-        }
-        else if (node.attrs.name != undefined) {
-            declarion = `UIColor(named: "${node.attrs.name}")`
-        }
- 
-        return declarion;
-    }
-    
-    private resolveImage(node: XibNode): string {
-        let declarion: string = '';
-        if (node.attrs.backgroundImage != undefined) {
-            declarion =  node.attrs.catalog == 'system' ? `UIImage(systemName: "${node.attrs.backgroundImage}")` : `UIImage(named: "${node.attrs.backgroundImage}")`
-        }
-        else if (node.attrs.catalog == 'system') {
-            declarion = `UIImage(systemName: "${node.attrs.image}")`
-        }
-        else if (node.attrs.name != undefined) {
-            declarion = `UIImage(named: "${node.attrs.name}")`
-        }
-        else if (node.attrs.image != undefined) {
-            declarion = `UIImage(named: "${node.attrs.image}")`
-        }
-      
-        return declarion;
     }
 }

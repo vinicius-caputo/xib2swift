@@ -11,11 +11,7 @@ export function xib2swift(xibFile: string): string {
     const viewHierchyGen = new ViewHierachyGen();
     const constraintsDeclarationsGen = new ConstraintsDeclaritonsGen();
     
-    let uiDeclarations = '';
-    for (const subview of xib.subviews) {
-        uiDeclarations+= uiDeclarationsGen.generateUIDeclarations(subview.content);
-    }
-
+    let uiDeclarations =  uiDeclarationsGen.generateUIDeclarations(xib.subviews);
     let constraintsDeclarations = constraintsDeclarationsGen.generateConstraintsDeclarations(xib.constraints);
     
     let viewHierachy = '';

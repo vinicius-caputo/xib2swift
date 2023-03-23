@@ -39,3 +39,10 @@ export interface Constraint {
     anchor: string,
     declaration: string
 }
+
+export interface uiDeclaraiton {
+    type: string,
+    intializationMethod: string,
+    beforeDeclaration: string,
+    declaration: string,
+}
