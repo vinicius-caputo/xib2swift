@@ -1,10 +1,12 @@
-import { aditionalConfiguration, XibNode } from "../types";
+import { aditionalConfiguration, uiDeclaraiton, XibNode } from "../types";
 import { shouldIgnoreProperty, ignoredTags, defaultRules } from "../rules";
 import { Resolve } from "./CommonResolve";
 import { capitalizeFirstLetter } from "../Utils";
 import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class UIDeclarationsGen {
+
+    public static initialization: string = '' 
 
     public generateUIDeclarations(subviews: XibNode[]): string {
         let uiDeclarations: string = '';
@@ -60,16 +62,10 @@ export class UIDeclarationsGen {
             'button': {
                 'state': () => {                
                     let property = ``;
-                    if (node.attrs.title != undefined) {
-                        property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n`;
-                    }
-                    if (node.attrs.image != undefined) {
-                        property += `\t${tag}.setImage(${Resolve.Image(node)}, for: .${node.attrs.key})\n`;
-                    }
-                    if (node.attrs.backgroundImage != undefined) {
-                        property += `\t${tag}.setBackgroundImage(${Resolve.Image(node)}), for: .${node.attrs.key})\n`;
-                    }
-                
+                    property += node.attrs.title != undefined ? `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .${node.attrs.key})\n` : '';
+                    property += node.attrs.image != undefined ? `\t${tag}.setImage(${Resolve.Image(node)}, for: .${node.attrs.key})\n` : '';
+                    property += node.attrs.backgroundImage != undefined ? `\t${tag}.setBackgroundImage(${Resolve.Image(node)}, for: .${node.attrs.key})\n` : '';
+                   
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
@@ -83,8 +79,8 @@ export class UIDeclarationsGen {
                 },
                 'fontDescription': () => { 
                     let weight = node.attrs.weight != undefined ? `, weight: .${node.attrs.weight}` : '';
-                    return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` },
-               
+                    return `\t${tag}.titleLabel?.font = .systemFont(ofSize: ${node.attrs.pointSize}${weight})\n` 
+                },
                 'buttonConfiguration': () => { 
                     let property = `\t${tag}.configuration = .${node.attrs.style}()\n`;
                     property += `\t${tag}.setTitle("${node.attrs.title ?? ''}", for: .normal)\n`;
@@ -132,6 +128,23 @@ export class UIDeclarationsGen {
                         }
                     }
                     return property
+                },
+                'userDefinedRuntimeAttributes': () => {
+                    let property = '';
+                    let children = node.content.filter(child => child.tag == 'userDefinedRuntimeAttribute');
+                    for (const child of children) {
+                        if (child.attrs.type == 'number') {
+                            property += `\t${tag}.${child.attrs.keyPath} = ${child.attrs.value}\n`;
+                        }
+                        else if ( child.attrs.type == 'size') {
+                            property += `\t${tag}.${child.attrs.keyPath} = CGSize(width: ${child.attrs.value}, height: ${child.attrs.value})\n`;
+                        }
+                        else if ( child.attrs.type == 'color') {
+                            let color = child.content[0];
+                            property += color != undefined ? `\t${tag}.${child.attrs.keyPath} = ${Resolve.Color(color)}\n` : '';
+                        }
+                    }
+                    return property;
                 },
             }
         }
