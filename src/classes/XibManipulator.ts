@@ -4,12 +4,14 @@ import { parser } from 'posthtml-parser'
 export class Xib {
     public static instace: Xib;
 
-    public xibNodes: XibNode[] = [];
-    public outlets: Outlet[] = [];
+    private xibNodes: XibNode[] = [];
+    private outlets: Outlet[] = [];
+
+    public baseView: XibNode | undefined;
     public constraints: XibNode[] = [];
     public subviews: XibNode[] = [];
     public tableIDtoName: IDtoName = {};
-
+   
     public constructor(xib: string) {
         this.xibNodes = parser(xib, { xmlMode: true }) as XibNode[];
         this.xibNodes = this.clearEmptyNodes(this.xibNodes);
@@ -71,7 +73,9 @@ export class Xib {
     private resolveBaseView(node: XibNode): void {
         let father = node.father;
         if (father == undefined) return;
+        this.baseView = father;
         if (father.attrs.id == undefined ){
+            this.baseView = father.father;
             father.attrs.id = father.father?.attrs.id ?? 'baseView';
         }
         if (father.attrs.key != undefined ){

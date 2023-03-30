@@ -6,17 +6,12 @@ import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class UIDeclarationsGen {
 
-    private declationConfig: uiDeclaraitonConfig = {
-        visibliityModifier: 'private ',
-        type: 'UI',
-        intializationMethod: '()',
-        beforeInstaceProperties: '',
-    }
+    private declationConfig: uiDeclaraitonConfig = this.setupDeclarationConfig();
 
-    private setupDeclarationConfig(node: XibNode): uiDeclaraitonConfig {
+    private setupDeclarationConfig(node?: XibNode): uiDeclaraitonConfig {
         return {
             visibliityModifier: 'private ',
-            type: `UI${capitalizeFirstLetter(node.tag)}`,
+            type: `UI${capitalizeFirstLetter(node?.tag ?? '')}`,
             intializationMethod: '()',
             beforeInstaceProperties: ''
         }
@@ -99,7 +94,7 @@ export class UIDeclarationsGen {
         return propertyToResolve[property] != undefined ? propertyToResolve[property]() : propertyToResolve['default']();
     }
 
-    private generateDeclarationForSubNodes(tag: string, nodes: XibNode[]): string {
+    public generateDeclarationForSubNodes(tag: string, nodes: XibNode[]): string {
         let property: string = '';
         for (const node of nodes) {
             property += this.resolveSubNode(tag, node);
@@ -206,5 +201,14 @@ export class UIDeclarationsGen {
             return addAditionalConfiguration['common'][node.tag] != undefined ? addAditionalConfiguration['common'][node.tag]() : '';
         }
         return addAditionalConfiguration[tag][node.tag] != undefined ? addAditionalConfiguration[tag][node.tag]() : ''
+    }
+
+    public genereteBaseViewProperties(baseView?: XibNode): string { 
+        let property: string = '';
+        if (baseView == undefined) return property;
+        for (const node of baseView.content) {
+            property += this.resolveSubNode(resolveIdToPropetyName(baseView.attrs.id), node);
+        }
+        return property;
     }
 }

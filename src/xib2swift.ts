@@ -18,7 +18,12 @@ export function xib2swift(xibFile: string): string {
     for (const subview of xib.subviews.reverse()) {
         viewHierachy += viewHierchyGen.generateViewHierachy(subview);
     }
+
+    let baseViewDeclaration = uiDeclarationsGen.genereteBaseViewProperties(xib.baseView);
     
-    return uiDeclarations + '\n----------------------------\n' + viewHierachy + '\n----------------------------\n' + constraintsDeclarations;
+    return '\n<------------- UI Elements --------------->\n' + uiDeclarations + 
+    '\n<------------- View Hierachy --------------->\n' + viewHierachy +  
+    '\n<------------- Constrains --------------->\n' + constraintsDeclarations +
+    '\n<------------- Base View Properties --------------->\n' + baseViewDeclaration;
 }
 
