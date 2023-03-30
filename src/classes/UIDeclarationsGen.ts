@@ -1,12 +1,26 @@
-import { aditionalConfiguration, uiDeclaraiton, XibNode } from "../types";
-import { shouldIgnoreProperty, ignoredTags, defaultRules } from "../rules";
+import { aditionalConfiguration, uiDeclaraitonConfig, XibNode } from "../types";
+import { shouldIgnoreProperty, ignoredTags, defaultRules, rules } from "../rules";
 import { Resolve } from "./CommonResolve";
-import { capitalizeFirstLetter } from "../Utils";
+import { capitalizeFirstLetter, lowerFirstletter } from "../Utils";
 import { resolveIdToPropetyName } from "./XibManipulator";
 
 export class UIDeclarationsGen {
 
-    public static initialization: string = '' 
+    private declationConfig: uiDeclaraitonConfig = {
+        visibliityModifier: 'private ',
+        type: 'UI',
+        intializationMethod: '()',
+        beforeInstaceProperties: '',
+    }
+
+    private setupDeclarationConfig(node: XibNode): uiDeclaraitonConfig {
+        return {
+            visibliityModifier: 'private ',
+            type: `UI${capitalizeFirstLetter(node.tag)}`,
+            intializationMethod: '()',
+            beforeInstaceProperties: ''
+        }
+    }
 
     public generateUIDeclarations(subviews: XibNode[]): string {
         let uiDeclarations: string = '';
@@ -21,9 +35,15 @@ export class UIDeclarationsGen {
         nodes = nodes.filter(node => ignoredTags.includes(node.tag) == false);
     
         for (const node of nodes) {
-            let property: string = this.resolveAtributes(node);
-            property += `${this.generateDeclarationForSubNodes(node.tag, node.content)}`;
-            uiDeclarations += `private lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
+            this.declationConfig = this.setupDeclarationConfig(node);
+            let properties: string = this.resolveAtributes(node);
+            properties += `${this.generateDeclarationForSubNodes(node.tag, node.content)}`;
+
+            uiDeclarations += `\n${this.declationConfig.visibliityModifier}lazy var ${resolveIdToPropetyName(node.attrs.id)}: ${this.declationConfig.type} = {\n` + 
+                              `${this.declationConfig.beforeInstaceProperties}`+
+                              `\tlet ${node.tag} =  ${this.declationConfig.type}${this.declationConfig.intializationMethod}` +
+                              `${properties}` +
+                              `\treturn ${node.tag}\n}()\n`;
         }
         return uiDeclarations;
     }
@@ -33,12 +53,50 @@ export class UIDeclarationsGen {
         let property: string = '\n';
         for (const key in attributes)  {
             if (shouldIgnoreProperty(node.tag, key)) continue;
-            
-            let attributeDeclarion = `\t${node.tag}.${Resolve.propertyName(node.tag, key)} = ${Resolve.resultValue(attributes[key], key, node)}\n`;
+
+            let attributeDeclarion = `\t${node.tag}.${this.resolvePropertyName(node.tag, key)} = ${this.resolveResultValue(attributes[key], key, node)}\n`;
             if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
             property += attributeDeclarion;
         }
         return property;
+    }
+
+    private resolvePropertyName(tag: string, key: string): string {
+        return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? key;
+    }
+
+    private resolveResultValue(result: string, property: string, node?: XibNode): string {
+    
+        const propertyToResolve: any = {
+            'text': () => { return `"${result}"`; },
+            'image': () => { return node != undefined ? `${Resolve.Image(node)}`: ''; },
+            'customClass': () => { 
+                this.declationConfig.type = result;
+                return ''; 
+            },
+            'lineBreakMode': () => {
+                let lineBreakModes: any = {
+                    'wordWrap': '.byWordWrapping',
+                    'tailTruncation': '.byTruncatingTail',
+                    'headTruncation': '.byTruncatingHead',
+                    'middleTruncation': '.byTruncatingMiddle',
+                    'charWrap': '.byCharWrapping',
+                    'clip': '.byClipping',
+                }
+                return lineBreakModes[result] ?? '.byWordWrapping';
+            },
+            'default': () => {
+                switch (result) {
+                    case "NO":
+                        return "false";
+                    case "YES":
+                        return "true";
+                    default:
+                        return /\d/.test(result) ? result : `.${lowerFirstletter(result)}`;
+                }
+            },
+        }
+        return propertyToResolve[property] != undefined ? propertyToResolve[property]() : propertyToResolve['default']();
     }
 
     private generateDeclarationForSubNodes(tag: string, nodes: XibNode[]): string {
@@ -93,15 +151,16 @@ export class UIDeclarationsGen {
                     let attributes = node.attrs;
                     for (const key in attributes) {
                         if (ignoredAttributes.includes(key)) continue;
-                        property += `\tlayout.${key} = ${Resolve.resultValue(attributes[key], key)}\n`;
+                        property += `\tlayout.${key} = ${this.resolveResultValue(attributes[key], key)}\n`;
                     }
                     for (const child of node.content) {
                         if (child.tag == 'size') {
                             property += `\tlayout.${child.attrs.key} = CGSize(width: ${child.attrs.width}, height: ${child.attrs.height})\n`;
                         }
                     }
-                    property += `\t${tag}.collectionViewLayout = layout\n`;
-                    return property;
+                    this.declationConfig.beforeInstaceProperties = property;
+                    this.declationConfig.intializationMethod = '(frame: .zero, collectionViewLayout: layout)';
+                    return '';
                 },
            },
             'common': {

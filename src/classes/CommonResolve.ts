@@ -1,66 +1,7 @@
-import { Rules, XibNode } from "../types";
-import { lowerFirstletter } from "../Utils";
+import { XibNode } from "../types";
+
 
 export class Resolve {
-
-    public static propertyName(tag: string, key: string): string {
-        const rules: Rules = {
-            label: {
-                adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
-            },
-            button: {},
-            view: {},
-            stackView: {},
-            slider: {
-                minValue: 'minimumValue',
-                maxValue: 'maximumValue',
-            },
-            tableView: {},
-            collectionView: {
-                multipleTouchEnabled: 'isMultipleTouchEnabled',
-                directionalLockEnabled: 'isDirectionalLockEnabled',
-                pagingEnabled: 'isPagingEnabled',
-                prefetchingEnabled: 'isPrefetchingEnabled',
-            },
-            imageView: {},
-            pageControl: {},
-            common: {
-                opaque: 'isOpaque',
-                userInteractionEnabled: 'isUserInteractionEnabled',
-            }
-        }
-        return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? key;
-    }
-
-    public static resultValue(result: string, property: string, node?: XibNode): string {
-    
-        const propertyToResolve: any = {
-            'text': () => { return `"${result}"`; },
-            'image': () => { return node != undefined ? `${Resolve.Image(node)}`: ''; },
-            'lineBreakMode': () => {
-                let lineBreakModes: any = {
-                    'wordWrap': '.byWordWrapping',
-                    'tailTruncation': '.byTruncatingTail',
-                    'headTruncation': '.byTruncatingHead',
-                    'middleTruncation': '.byTruncatingMiddle',
-                    'charWrap': '.byCharWrapping',
-                    'clip': '.byClipping',
-                }
-                return lineBreakModes[result] ?? '.byWordWrapping';
-            },
-            'default': () => {
-                switch (result) {
-                    case "NO":
-                        return "false";
-                    case "YES":
-                        return "true";
-                    default:
-                        return /\d/.test(result) ? result : `.${lowerFirstletter(result)}`;
-                }
-            },
-        }
-        return propertyToResolve[property] != undefined ? propertyToResolve[property]() : propertyToResolve['default']();
-    }
 
     public static Color(node: XibNode): string {
         let declaration: string = '';
