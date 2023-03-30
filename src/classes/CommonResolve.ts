@@ -18,6 +18,9 @@ export class Resolve {
             tableView: {},
             collectionView: {
                 multipleTouchEnabled: 'isMultipleTouchEnabled',
+                directionalLockEnabled: 'isDirectionalLockEnabled',
+                pagingEnabled: 'isPagingEnabled',
+                prefetchingEnabled: 'isPrefetchingEnabled',
             },
             imageView: {},
             pageControl: {},
@@ -26,30 +29,24 @@ export class Resolve {
                 userInteractionEnabled: 'isUserInteractionEnabled',
             }
         }
-        return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? undefined;
+        return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? key;
     }
 
-    public static resultValue(result: string, property: string): string {
+    public static resultValue(result: string, property: string, node?: XibNode): string {
     
         const propertyToResolve: any = {
             'text': () => { return `"${result}"`; },
+            'image': () => { return node != undefined ? `${Resolve.Image(node)}`: ''; },
             'lineBreakMode': () => {
-                switch (result) {
-                    case 'wordWrap':
-                        return '.byWordWrapping';
-                    case 'tailTruncation':
-                        return '.byTruncatingTail';
-                    case 'headTruncation':
-                        return '.byTruncatingHead';
-                    case 'middleTruncation':
-                        return '.byTruncatingMiddle';
-                    case 'charWrap':
-                        return '.byCharWrapping';
-                    case 'clip':
-                        return '.byClipping';
-                    default:
-                        return '.byWordWrapping'
-                };
+                let lineBreakModes: any = {
+                    'wordWrap': '.byWordWrapping',
+                    'tailTruncation': '.byTruncatingTail',
+                    'headTruncation': '.byTruncatingHead',
+                    'middleTruncation': '.byTruncatingMiddle',
+                    'charWrap': '.byCharWrapping',
+                    'clip': '.byClipping',
+                }
+                return lineBreakModes[result] ?? '.byWordWrapping';
             },
             'default': () => {
                 switch (result) {
@@ -76,13 +73,12 @@ export class Resolve {
         else if (node.attrs.customColorSpace == 'displayP3') {
             declaration = `UIColor(displayP3Red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
         }
-        /* not tested
         else if (node.attrs.customColorSpace == 'calibratedWhite') {
             declaration = `UIColor(white: ${node.attrs.white}, alpha: ${node.attrs.alpha})`
         }
         else if (node.attrs.customColorSpace == 'calibratedRGB') {
             declaration = `UIColor(red: ${node.attrs.red}, green: ${node.attrs.green}, blue: ${node.attrs.blue}, alpha: ${node.attrs.alpha})`
-        }*/
+        }
         else if (node.attrs.systemColor != undefined)  {
             declaration = `.${node.attrs.systemColor.replace('Color', '')}`
         }

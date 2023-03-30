@@ -23,28 +23,20 @@ export class UIDeclarationsGen {
         for (const node of nodes) {
             let property: string = this.resolveAtributes(node);
             property += `${this.generateDeclarationForSubNodes(node.tag, node.content)}`;
-            uiDeclarations += `lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
+            uiDeclarations += `private lazy var ${resolveIdToPropetyName(node.attrs.id)}: UI${capitalizeFirstLetter(node.tag)} = {\n\tlet ${node.tag} = UI${capitalizeFirstLetter(node.tag)}()${property}\treturn ${node.tag}\n}()\n\n`;
         }
         return uiDeclarations;
     }
 
     private resolveAtributes(node: XibNode): string {
-        let attributes = node.attrs;
+        let attributes = node.attrs
         let property: string = '\n';
-    
         for (const key in attributes)  {
             if (shouldIgnoreProperty(node.tag, key)) continue;
-            if (Resolve.propertyName(node.tag, key) != undefined) {
-                let attributeDeclarion = `\t${node.tag}.${Resolve.propertyName(node.tag, key)} = ${Resolve.resultValue(attributes[key], key)}\n`;
-                if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
-                property += attributeDeclarion;
-            } else {
-                if (node.tag == 'imageView' && key == 'image') {
-                    property += `\t${node.tag}.image = ${Resolve.Image(node)}\n`;
-                    continue;
-                }
-                property += `\t${node.tag}.${key} = ${Resolve.resultValue(attributes[key], key)}\n`;
-            }
+            
+            let attributeDeclarion = `\t${node.tag}.${Resolve.propertyName(node.tag, key)} = ${Resolve.resultValue(attributes[key], key, node)}\n`;
+            if (attributeDeclarion == `\t${node.tag}.${defaultRules[key]}\n`) continue;
+            property += attributeDeclarion;
         }
         return property;
     }
@@ -134,10 +126,12 @@ export class UIDeclarationsGen {
                     let children = node.content.filter(child => child.tag == 'userDefinedRuntimeAttribute');
                     for (const child of children) {
                         if (child.attrs.type == 'number') {
-                            property += `\t${tag}.${child.attrs.keyPath} = ${child.attrs.value}\n`;
+                            let number = child.content[0];
+                            property += `\t${tag}.${child.attrs.keyPath} = ${number.attrs.value}\n`;
                         }
                         else if ( child.attrs.type == 'size') {
-                            property += `\t${tag}.${child.attrs.keyPath} = CGSize(width: ${child.attrs.value}, height: ${child.attrs.value})\n`;
+                            let size = child.content[0];
+                            property += `\t${tag}.${child.attrs.keyPath} = CGSize(width: ${size.attrs.width}, height: ${size.attrs.height})\n`;
                         }
                         else if ( child.attrs.type == 'color') {
                             let color = child.content[0];
@@ -150,7 +144,7 @@ export class UIDeclarationsGen {
         }
         
         if (addAditionalConfiguration[tag] == undefined || addAditionalConfiguration[tag][node.tag] == undefined)  {
-            return addAditionalConfiguration['common'][node.tag] != undefined ? addAditionalConfiguration['common'][node.tag]() : ''
+            return addAditionalConfiguration['common'][node.tag] != undefined ? addAditionalConfiguration['common'][node.tag]() : '';
         }
         return addAditionalConfiguration[tag][node.tag] != undefined ? addAditionalConfiguration[tag][node.tag]() : ''
     }
