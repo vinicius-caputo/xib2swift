@@ -15,7 +15,7 @@ export function shouldIgnoreProperty(tag: string, key: string): boolean {
         imageView: ['catalog'],
         tableView: ['style'],
         collectionView: ['dataMode'],
-        common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id',  'clipsSubviews', 'adjustsLetterSpacingToFitWidth'],
+        common: ['horizontalHuggingPriority', 'verticalHuggingPriority', 'fixedFrame', 'id', 'adjustsLetterSpacingToFitWidth'],
     }
     let ignoredRules =  propertyToIgnore['common'] + propertyToIgnore[tag];
     return ignoredRules.includes(key);
@@ -43,6 +43,7 @@ export const rules: Rules = {
     imageView: {},
     pageControl: {},
     common: {
+        clipSubviews: 'clipsToBounds',
         opaque: 'isOpaque',
         userInteractionEnabled: 'isUserInteractionEnabled',
     }

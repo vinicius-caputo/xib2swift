@@ -114,7 +114,7 @@ export class UIDeclarationsGen {
                     let children = node.content;
                     for (const child of children) {
                         if (child.tag == 'color') {
-                            property += `\t${tag}.${node.attrs.key}(${Resolve.Color(child)}, for: .${node.attrs.key})\n`
+                            property += `\t${tag}.set${capitalizeFirstLetter(child.attrs.key)}(${Resolve.Color(child)}, for: .${node.attrs.key})\n`
                         }
                         else if (child.tag == 'imageReference') {
                             property += `\t${tag}.setImage(${Resolve.Image(child)}, for: .${node.attrs.key})\n`

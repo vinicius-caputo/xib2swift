@@ -15,15 +15,15 @@ export function xib2swift(xibFile: string): string {
     let constraintsDeclarations = constraintsDeclarationsGen.generateConstraintsDeclarations(xib.constraints);
     
     let viewHierachy = '';
-    for (const subview of xib.subviews.reverse()) {
+    for (const subview of xib.subviews) {
         viewHierachy += viewHierchyGen.generateViewHierachy(subview);
     }
 
     let baseViewDeclaration = uiDeclarationsGen.genereteBaseViewProperties(xib.baseView);
     
     return '\n<------------- UI Elements --------------->\n' + uiDeclarations + 
-    '\n<------------- View Hierachy --------------->\n' + viewHierachy +  
-    '\n<------------- Constrains --------------->\n' + constraintsDeclarations +
-    '\n<------------- Base View Properties --------------->\n' + baseViewDeclaration;
+    '\n<------------- View Hierachy --------------->\n\n' + viewHierachy +  
+    '\n<------------- Constrains --------------->\n\n' + constraintsDeclarations +
+    '\n<------------- Base View Properties --------------->\n\n' + baseViewDeclaration;
 }
 
