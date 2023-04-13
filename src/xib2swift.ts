@@ -24,6 +24,6 @@ export function xib2swift(xibFile: string): string {
     return '\n<------------- UI Elements --------------->\n' + uiDeclarations + 
     '\n<------------- View Hierachy --------------->\n\n' + viewHierachy +  
     '\n<------------- Constrains --------------->\n\n' + constraintsDeclarations +
-    '\n<------------- Base View Properties --------------->\n\n' + baseViewDeclaration;
+    '\n<------------- Base View Properties --------------->\n\n' + baseViewDeclaration.replaceAll('\t', '');
 }
 
