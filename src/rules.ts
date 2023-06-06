@@ -21,27 +21,21 @@ export function shouldIgnoreProperty(tag: string, key: string): boolean {
     return ignoredRules.includes(key);
 }
 
-
+// Add only tags that have different name in swift
 export const rules: Rules = {
     label: {
         adjustsFontSizeToFit: 'adjustsFontSizeToFitWidth',
     },
-    button: {},
-    view: {},
-    stackView: {},
     slider: {
         minValue: 'minimumValue',
         maxValue: 'maximumValue',
     },
-    tableView: {},
     collectionView: {
         multipleTouchEnabled: 'isMultipleTouchEnabled',
         directionalLockEnabled: 'isDirectionalLockEnabled',
         pagingEnabled: 'isPagingEnabled',
         prefetchingEnabled: 'isPrefetchingEnabled',
     },
-    imageView: {},
-    pageControl: {},
     common: {
         clipSubviews: 'clipsToBounds',
         opaque: 'isOpaque',

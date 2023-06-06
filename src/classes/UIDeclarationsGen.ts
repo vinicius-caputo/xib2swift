@@ -57,6 +57,7 @@ export class UIDeclarationsGen {
     }
 
     private resolvePropertyName(tag: string, key: string): string {
+        if (rules[tag] == undefined) return rules['common'][key] ?? key;
         return rules[tag][key] != undefined ? rules[tag][key] : rules['common'][key] ?? key;
     }
 
@@ -79,6 +80,9 @@ export class UIDeclarationsGen {
                     'clip': '.byClipping',
                 }
                 return lineBreakModes[result] ?? '.byWordWrapping';
+            },
+            "placeholder": () => {
+                return `"${result}"`;
             },
             'default': () => {
                 switch (result) {
@@ -158,6 +162,13 @@ export class UIDeclarationsGen {
                     return '';
                 },
            },
+           "textField": {
+                "textInputTraits": () => { 
+                    let property = '';
+                    property += node.attrs.keyboardType != undefined ? `\t${tag}.keyboardType = .${node.attrs.keyboardType}\n` : '';
+                    return property;
+                },
+            },
             'common': {
                 'color': () => { return `\t${tag}.${node.attrs.key} = ${Resolve.Color(node)}\n`},
                 'fontDescription': () => { 
