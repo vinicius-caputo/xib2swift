@@ -36,7 +36,7 @@ export class UIDeclarationsGen {
 
             uiDeclarations += `\n${this.declationConfig.visibliityModifier}lazy var ${resolveIdToPropetyName(node.attrs.id)}: ${this.declationConfig.type} = {\n` + 
                               `${this.declationConfig.beforeInstaceProperties}`+
-                              `\tlet ${node.tag} =  ${this.declationConfig.type}${this.declationConfig.intializationMethod}` +
+                              `\tlet ${node.tag} = ${this.declationConfig.type}${this.declationConfig.intializationMethod}` +
                               `${properties}` +
                               `\treturn ${node.tag}\n}()\n`;
         }
