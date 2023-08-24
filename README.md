@@ -19,7 +19,7 @@ This tool wants to help to migrate projects from storyboard to swift code, and m
 
 # <a name="how-to-use"></a> How to use 
 
-The simplest way to use this tool is to use the is acessing the [online converter website](https://vinicius-caputo.github.io/xib2viewcode/), paste de xib code in the left text area and click in the button "Convert", the result will be shown in the rigth text area.
+The simplest way to use this tool is to use the is acessing the [online converter website](https://vinicius-caputo.github.io/xib2swift/), paste de xib code in the left text area and click in the button "Convert", the result will be shown in the rigth text area.
 
 In other way you can clone this repository and a use npm install to install the dependencies, you can use the xib2viewcode function in the src/index.ts to convert the xib code to swift code. It takes a string with the xib code and returns a string with the swift code.
 
@@ -41,7 +41,7 @@ The website code is in the website folder, and is a simple htlm page, to use the
 First of all, thank you wanting for contributing to this project!
 There are some guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
-The are open issues in the [issue tracker](https://github.com/vinicius-caputo/xib2viewcode/issues) that you can work on, or you can create a new issue if you find a bug or have a feature, improvement or refactoring suggestion see the [issue section](#issue) for more details.
+The are open issues in the [issue tracker](https://github.com/vinicius-caputo/xib2swift/issues) that you can work on, or you can create a new issue if you find a bug or have a feature, improvement or refactoring suggestion see the [issue section](#issue) for more details.
 
 After a merge request is accepted, the github actions will the build, the github actions will publish a new version of online converter website.
 
@@ -53,7 +53,7 @@ Even better, you can [submit a Pull Request](#submit-pr) with a fix.
 
 ## <a name="submit-issue"></a> Submitting an Issue
 
-Before you submit an issue, please search the [issue tracker](https://github.com/vinicius-caputo/xib2viewcode/issues). An issue for your problem might already exist and the discussion might inform you of workarounds readily available.
+Before you submit an issue, please search the [issue tracker](https://github.com/vinicius-caputo/xib2swift/issues). An issue for your problem might already exist and the discussion might inform you of workarounds readily available.
 
 We want to fix all the issues as soon as possible, but before fixing, we need to reproduce and confirm it. In order to reproduce bugs, we require that you provide a minimal way to reproduce then. Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions.
 
@@ -61,7 +61,7 @@ Writte the issue in english, and try to be as descriptive as possible, and if yo
 
 If you want a new feature is important to describe the problem that you want to solve, and if you can, add a code example or a link to a repository that reproduces the problem.
 
-Additionally, is important to tag the issue with the correct label, to help us to identify the type of issue see the [labels section](https://github.com/vinicius-caputo/xib2viewcode/labels) to see the list of labels that match the type of issue.
+Additionally, is important to tag the issue with the correct label, to help us to identify the type of issue see the [labels section](https://github.com/vinicius-caputo/xib2swift/labels) to see the list of labels that match the type of issue.
 
 ## <a name="submit-pr"></a> Submitting a Pull Request (PR)
 
