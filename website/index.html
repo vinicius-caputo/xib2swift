@@ -1,27 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>xib2swift</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-
-<body>
+  <body>
     <div id="menu">
-        <button id="generate-button">Convert</button>
+      <button id="generate-button">Convert</button>
     </div>
     <div id="box">
-        <div id="firstbox">
-            <textarea name="input-Text" id="input-Text" cols="30" rows="10"></textarea>
+      <div class="text-area-box col" id="input-text-area">
+        <div class="row">
+          <label for="input-text">Input:</label>
+          <button onclick="toogleFullscreen(this,'input-text')">
+            Full screen
+          </button>
         </div>
-        <div id="secondbox">
-            <textarea name="output-Text" id="output-Text" cols="30" rows="10"></textarea>
+        <textarea
+          name="input-text"
+          id="input-text"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+      <div class="text-area-box col">
+        <div class="row">
+          <label for="ui-declarations-text">UI declarations:</label>
+          <button onclick="toogleFullscreen(this,'ui-declarations-text')">
+            Full screen
+          </button>
         </div>
-    </div>
-    <script src="bundle.js" ></script>
-</body>
+        <textarea
+          name="ui-declarations-text"
+          id="ui-declarations-text"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+      <div class="text-area-box col">
+        <div class="row">
+          <label for="view-hierachy-text">View hierachy:</label>
+          <button onclick="toogleFullscreen(this,'view-hierachy-text')">
+            Full screen
+          </button>
+        </div>
 
+        <textarea
+          name="view-hierachy-text"
+          id="view-hierachy-text"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+      <div class="text-area-box col">
+        <div class="row">
+          <label for="constraints-declarations-text"
+            >Constraints declarations:</label
+          >
+          <button
+            onclick="toogleFullscreen(this,'constraints-declarations-text')"
+          >
+            Full screen
+          </button>
+        </div>
+
+        <textarea
+          name="constraints-declarations-text"
+          id="constraints-declarations-text"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+      <div class="text-area-box col">
+        <div class="row">
+          <label for="base-view-declaration-text">Base view:</label>
+          <button onclick="toogleFullscreen(this,'base-view-declaration-text')">
+            Full screen
+          </button>
+        </div>
+
+        <textarea
+          name="base-view-declaration-text"
+          id="base-view-declaration-text"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+    </div>
+    <script src="bundle.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>
