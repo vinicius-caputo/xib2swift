@@ -2,9 +2,8 @@ import { UIDeclarationsGen } from './classes/UIDeclarationsGen';
 import { ViewHierachyGen } from './classes/ViewHierachyGen';
 import { ConstraintsDeclaritonsGen } from './classes/ConstraintsDeclaritonsGen';
 import { Xib } from './classes/XibManipulator';
-import { Declarations } from './classes/Declarations';
 
-export function xib2swift(xibFile: string): Declarations {
+export function xib2swift(xibFile: string): string {
 
     const xib = new Xib(xibFile);
 
@@ -22,10 +21,9 @@ export function xib2swift(xibFile: string): Declarations {
 
     let baseViewDeclaration = uiDeclarationsGen.genereteBaseViewProperties(xib.baseView);
     
-    return new Declarations(
-      uiDeclarations,
-      viewHierachy,
-      constraintsDeclarations,
-      baseViewDeclaration.replaceAll("\t", "")
-    );
+    return '\n<------------- UI Elements --------------->\n' + uiDeclarations + 
+    '\n<------------- View Hierachy --------------->\n\n' + viewHierachy +  
+    '\n<------------- Constrains --------------->\n\n' + constraintsDeclarations +
+    '\n<------------- Base View Properties --------------->\n\n' + baseViewDeclaration.replaceAll('\t', '');
 }
+
