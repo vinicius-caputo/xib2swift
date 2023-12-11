@@ -32,12 +32,12 @@ function resolveArgs() {
 
     let convertedCode = '';
     if (string != '') {
-        convertedCode = xib2swift(string).getFormattedText();
+        convertedCode = xib2swift(string);
     }
     else if (path != '') {
         const fs = require('fs');
         let xibFile = fs.readFileSync(path, 'utf8')
-        convertedCode = xib2swift(xibFile).getFormattedText();
+        convertedCode = xib2swift(xibFile);
     }
     
     if (outputPath != '') {
