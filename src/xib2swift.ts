@@ -21,9 +21,9 @@ export function xib2swift(xibFile: string): string {
 
     let baseViewDeclaration = uiDeclarationsGen.genereteBaseViewProperties(xib.baseView);
     
-    return '\n<------------- UI Elements --------------->\n' + uiDeclarations + 
-    '\n<------------- View Hierachy --------------->\n\n' + viewHierachy +  
-    '\n<------------- Constrains --------------->\n\n' + constraintsDeclarations +
-    '\n<------------- Base View Properties --------------->\n\n' + baseViewDeclaration.replaceAll('\t', '');
+    return '\n// MARK: - UI Elements \n' + uiDeclarations + 
+    '\n// MARK: - View Hierachy \n\n' + viewHierachy +  
+    '\n// MARK: - Constraints \n\n' + constraintsDeclarations +
+    '\n// MARK: - Base View Properties \n\n' + baseViewDeclaration.replaceAll('\t', '');
 }
 

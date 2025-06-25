@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Swift Tools</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <div id="menu">
-        <button id="generate-button">Convert</button>
-    </div>
-    <div id="box">
-        <div id="firstbox">
-            <textarea name="input-Text" id="input-Text" cols="30" rows="10"></textarea>
-        </div>
-        <div id="secondbox">
-            <textarea name="output-Text" id="output-Text" cols="30" rows="10"></textarea>
-        </div>
-    </div>
-    <script src="bundle.js" ></script>
-</body>
+  <header id="menu">
+    <div id="title">SwiftTools</div>
+    <nav id="nav-buttons">
+      <span class="nav-button active">xib2swift</span>
+      <a class="nav-button" href="https://vinicius-caputo.github.io/swift2equatable/">swift2equatable</a>
+      <a class="nav-button" href="https://vinicius-caputo.github.io/swift2fixture/">swift2fixture</a>
+    </nav>
+  </header>
 
+  <section id="section-title">
+    xib2swift
+  </section>
+  <section id="description">
+    A tool to convert storyboard and .xib files that were created by Apple Interface Builder into Swift code.
+  </section>
+
+  <main id="box">
+    <section class="codebox">
+      <textarea id="input-Text" placeholder="Paste your code here..."></textarea>
+    </section>
+    <section class="codebox">
+      <textarea id="output-Text" placeholder="Converted code will appear here..."></textarea>
+    </section>
+  </main>
+
+  <footer id="footer-message">
+    Enjoyed this project? Consider giving a ⭐ to this
+    <a href="https://github.com/vinicius-caputo/xib2swift" target="_blank">GitHub repository</a>.
+  </footer>
+  
+  <script src="bundle.js"></script>
+</body>
 </html>
