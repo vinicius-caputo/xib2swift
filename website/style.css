@@ -133,6 +133,12 @@ textarea {
   font-weight: bold;
 }
 
+#footer-message a:nth-of-type(2) {
+  color: #0f3cdf;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 #footer-message a:hover {
   text-decoration: underline;
 }
